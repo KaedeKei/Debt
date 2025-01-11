@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34330.188
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shedule", "Shedule.csproj", "{7A0A0655-8CBD-4AE7-9A87-11F065D5E380}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7A0A0655-8CBD-4AE7-9A87-11F065D5E380}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7A0A0655-8CBD-4AE7-9A87-11F065D5E380}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A0A0655-8CBD-4AE7-9A87-11F065D5E380}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7A0A0655-8CBD-4AE7-9A87-11F065D5E380}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {423B0E51-3B8F-4CB9-B8C6-B187717BCA40}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,162 @@
+﻿@page "/edittingpaymentevent"
+@using Shedule.Data
+@using System.ComponentModel.DataAnnotations
+@using Shedule.Models
+@inject NavigationManager NavigationManager
+
+<PageTitle>EdittingSaleEvents</PageTitle>
+
+@inject IPaymentEvent ThisPaymentEvent
+@inject ICustomer ThisCustomer
+@inject ILogger<Index> Logger
+
+<h2>Изменение накладной</h2>
+
+<!-- кнопка удалить с уточнениями -->
+<div>
+	<button hidden="@_hideDeleteButton" @onclick="@ToggleDeleteButton" class="btn btn-outline-danger">удалить ⨉</button>
+	<button hidden="@_hideShureOrNotDeleteButton" @onclick="@ToggleDeleteButton" class="btn btn-primary">не удалять ⨉</button>
+	<button hidden="@_hideShureOrNotDeleteButton" @onclick="@RemoveEvent" class="btn btn-danger">точно удалить ⨉</button>
+</div>
+
+<hr />
+
+<!-- редактирование полей оплаты -->
+<table border="0" cellpadding="10">
+	<tbody>
+		<tr>
+			<td>Дата:</td>
+			<td>
+				<InputDate @bind-Value=@_date class="form-control" @onclick="RefreshMessageText"></InputDate>
+			</td>
+		</tr>
+
+		<tr><td>Содержание:</td><td><InputText @bind-Value=@_paymentName @onclick="RefreshMessageText" /></td></tr>
+
+		<tr>
+			<td>Покупатель:</td>
+			<td>
+				<InputSelect @bind-Value=@_thisCustomerId @onclick="RefreshMessageText">
+						@foreach (var customer in _customers)
+						{
+						<option value="@customer.Id">@customer.CustomerName</option>
+						}
+				</InputSelect>
+			</td>
+		</tr>
+
+		<tr><td>Сумма:</td><td><InputNumber @bind-Value=@_paymentSum @onclick="RefreshMessageText" /></td></tr>
+	</tbody>
+	
+</table>
+
+<!-- вывод результата сохранения изменений -->
+<div>@_messageText</div>
+
+<br />
+
+<!-- кнопки сохранения или возврата к списку -->
+<div>
+	<button @onclick="EditEvent" class="btn btn-success">Сохранить</button>
+	<a href="@pagetoreturn?id=@customerId" class="btn btn-light text-muted">Вернуться к списку</a>
+</div>
+
+@code {
+	[Parameter]
+	[SupplyParameterFromQuery]
+	public int id { get; set; }
+
+	[Parameter]
+	[SupplyParameterFromQuery]
+	public int customerId { get; set; }
+
+	[Parameter]
+	[SupplyParameterFromQuery]
+	public string pagetoreturn { get; set; }
+
+	private PaymentEvent? _event;
+	private IReadOnlyCollection<Customer> _customers;
+	private int _thisCustomerId;
+	private DateTime _date;
+	private double _paymentSum;
+	private string _paymentName;
+	private string _messageText;
+	private bool _hideDeleteButton;
+	private bool _hideShureOrNotDeleteButton;
+
+	protected override async Task OnInitializedAsync()
+	{
+		try
+		{
+			Logger.LogWarning("Before: {ThreadId}", Environment.CurrentManagedThreadId.ToString());
+
+			_customers = await ThisCustomer.GetCustomers();
+			_event = await ThisPaymentEvent.GetById(id);
+			_thisCustomerId = _event.CustomerId;
+			_date = _event.PaymentDate;
+			_paymentSum = _event.PaymentSumm;
+			_paymentName = _event.PaymentText;
+			_hideDeleteButton = false;
+			_hideShureOrNotDeleteButton = true;
+		}
+		catch (Exception ex)
+		{
+
+		}
+	}
+
+	//дедактирование оплаты
+	private async Task EditEvent()
+	{
+		try
+		{
+			Logger.LogWarning("Before: {ThreadId}", Environment.CurrentManagedThreadId.ToString());
+
+			if (_date != null && _thisCustomerId != null && _paymentSum != 0 && _paymentName != null)
+			{
+				_event.PaymentText = _paymentName;
+				_event.CustomerId = _thisCustomerId;
+				_event.PaymentDate = _date;
+				_event.PaymentSumm = _paymentSum;
+				await ThisPaymentEvent.Update(_event);
+				_messageText = "Изменения сохранены.";
+			}
+			else if (_date == null) { _messageText = "необходимо указать дату"; }
+			else if (_thisCustomerId == null) { _messageText = "необходимо выбрать покупателя"; }
+			else if (_paymentSum == 0) { _messageText = "необходимо указать сумму"; }
+			else if (_paymentName == null) { _messageText = "необходимо указать содержание"; }
+		}
+		catch (Exception ex)
+		{
+
+		}
+	}
+
+	//удаление оплаты
+	private async Task RemoveEvent()
+	{
+		try
+		{
+			string navigateTo = @pagetoreturn + "?id=" + customerId;
+			await ThisPaymentEvent.RemoveEvent(id);
+			NavigationManager.NavigateTo(navigateTo);
+		}
+		catch (Exception ex)
+		{
+
+		}
+	}
+
+	//очистка результата сохранения изменений при нажатии на поле редактирования
+	private void RefreshMessageText()
+	{
+		_messageText = "";
+	}
+
+	//переключение видимости кнопок при попытке удалить оплату
+	private void ToggleDeleteButton()
+	{
+		_hideDeleteButton = !_hideDeleteButton;
+		_hideShureOrNotDeleteButton = !_hideShureOrNotDeleteButton;
+	}
+}

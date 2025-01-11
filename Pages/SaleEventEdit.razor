@@ -1,0 +1,178 @@
+﻿@page "/edittingsaleevent"
+@using Shedule.Data
+@using System.ComponentModel.DataAnnotations
+@using Shedule.Models
+@inject NavigationManager NavigationManager
+
+<PageTitle>EdittingSaleEvents</PageTitle>
+
+@inject ISaleEvent ThisSaleEvent
+@inject ICity ThisCity
+@inject ICustomer ThisCustomer
+@inject ILogger<Index> Logger
+
+<h2>Изменение накладной</h2>
+
+<!-- кнопка удалить с уточнениями -->
+<div>
+	<button hidden="@_hideDeleteButton" @onclick="@ToggleDeleteButton" class="btn btn-outline-danger">удалить ⨉</button>
+	<button hidden="@_hideShureOrNotDeleteButton" @onclick="@ToggleDeleteButton" class="btn btn-primary">не удалять ⨉</button>
+	<button hidden="@_hideShureOrNotDeleteButton" @onclick="@RemoveEvent" class="btn btn-danger">точно удалить ⨉</button>
+</div>
+
+<hr />
+
+<!-- редактирование полей закупки -->
+<table border="0" cellpadding="10">
+	<tr><td>Название:</td><td><InputText @bind-Value=@_saleName @onclick="RefreshMessageText" /></td></tr>
+	
+	<tr><td>Покупатель:</td>
+		<td>
+			<InputSelect @bind-Value=@_thisCustomerId @onclick="RefreshMessageText">
+				@foreach (var customer in _customers)
+				{
+					<option value="@customer.Id">@customer.CustomerName</option>
+				}
+			</InputSelect>
+		</td>
+	</tr>
+
+	<tr>
+		<td>Дата:</td>
+		<td>
+			<InputDate @bind-Value=@_date class="form-control" @onclick="RefreshMessageText"></InputDate>
+		</td>
+	</tr>
+
+	<tr><td>Сумма:</td><td><InputNumber @bind-Value=@_saleSum @onclick="RefreshMessageText" /></td></tr>
+	
+	<tr>
+		<td>Город:</td>
+		<td>
+			<InputSelect @bind-Value=@_cityId @onclick="RefreshMessageText">
+				@foreach (var city in _cities)
+				{
+					<option value="@city.Id">@city.CityName</option>
+				}
+			</InputSelect>
+		</td>
+	</tr>
+
+</table>
+
+<!-- вывод результата сохранения изменений -->
+<div>@_messageText</div>
+
+<br />
+
+<!-- кнопки сохранения или возврата к списку -->
+<div>
+	<button @onclick="EditEvent" class="btn btn-success"> Сохранить </button>
+	<a href="@pagetoreturn?id=@customerId" class="btn btn-light text-muted">Вернуться к списку </a>
+</div>
+
+@code {
+	[Parameter]
+	[SupplyParameterFromQuery]
+	public int id { get; set; }
+
+	[Parameter]
+	[SupplyParameterFromQuery]
+	public int customerId { get; set; }
+
+	[Parameter]
+	[SupplyParameterFromQuery]
+	public string pagetoreturn { get; set; }
+
+	private SaleEvent? _event;
+	private IReadOnlyCollection<City> _cities;
+	private IReadOnlyCollection<Customer> _customers;
+	private int _thisCustomerId;
+	private DateTime _date;
+	private double _saleSum;
+	private string _saleName;
+	private int _cityId;
+	string _messageText;
+	private bool _hideDeleteButton;
+	private bool _hideShureOrNotDeleteButton;
+
+	protected override async Task OnInitializedAsync()
+	{
+		try
+		{
+			Logger.LogWarning("Before: {ThreadId}", Environment.CurrentManagedThreadId.ToString());
+
+			_cities = await ThisCity.GetCities();
+			_customers = await ThisCustomer.GetCustomers();
+			_event = await ThisSaleEvent.GetById(id);
+			_thisCustomerId = _event.CustomerId;
+			_date = _event.SaleDate;
+			_saleSum = _event.SaleSumm;
+			_saleName = _event.SaleName;
+			_cityId = _event.SaleCityId;
+			_hideDeleteButton = false;
+			_hideShureOrNotDeleteButton = true;
+		}
+		catch (Exception ex)
+		{
+
+		}
+	}
+
+	//редактирование закупки
+	private async Task EditEvent()
+	{
+		try
+		{
+			Logger.LogWarning("Before: {ThreadId}", Environment.CurrentManagedThreadId.ToString());
+
+			if (_date != null && _thisCustomerId != null && _saleSum != 0 && _saleName != null && _cityId != null)
+			{
+				_event.SaleName = _saleName;
+				_event.CustomerId = _thisCustomerId;
+				_event.SaleDate = _date;
+				_event.SaleSumm = _saleSum;
+				_event.SaleCityId = _cityId;
+				await ThisSaleEvent.Update(_event);
+				_messageText = "Изменения сохранены.";
+			}
+			else if (_date == null) { _messageText = "необходимо указать дату"; }
+			else if (_thisCustomerId == null) { _messageText = "необходимо выбрать покупателя"; }
+			else if (_cityId == null) { _messageText = "необходимо выбрать город"; }
+			else if (_saleSum == 0) { _messageText = "необходимо указать сумму"; }
+			else if (_saleName == null) { _messageText = "необходимо указать содержание"; }
+		}
+		catch (Exception ex)
+		{
+
+		}
+	}
+
+	//удаление закупки
+	private async Task RemoveEvent()
+	{
+		try
+		{
+			string navigateTo = @pagetoreturn + "?id=" + customerId;
+			await ThisSaleEvent.RemoveEvent(id);
+			NavigationManager.NavigateTo(navigateTo);
+		}
+		catch (Exception ex)
+		{
+
+		}
+	}
+
+	//очистка результата сохранения изменений при нажатии на поле редактирования
+	private void RefreshMessageText()
+	{
+		_messageText = "";
+	}
+
+	//переключение видимости кнопок при попытке удалить закупку
+	private void ToggleDeleteButton()
+	{
+		_hideDeleteButton = !_hideDeleteButton;
+		_hideShureOrNotDeleteButton = !_hideShureOrNotDeleteButton;
+	}
+}

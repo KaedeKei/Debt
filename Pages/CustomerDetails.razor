@@ -1,0 +1,297 @@
+﻿@page "/customerdetails"
+@using Shedule.Data
+@using System.ComponentModel.DataAnnotations
+@using Shedule.Models
+@using Shedule.Services
+
+<PageTitle>CustomerDetails</PageTitle>
+
+@inject ICustomer ThisCustomer
+@inject ICity ThisCity
+@inject ISeller ThisSeller
+@inject ISaleEvent ThisSaleEvent
+@inject IPaymentEvent ThisPaymentEvent
+@inject NavigationManager NavigationManager
+@inject ILogger<Index> Logger
+
+<h2>@_customer.CustomerName</h2>
+<h6>ИНН: @_customer.INN</h6>
+<h6 >Договор с @_seller.SellerName, количество точек: @_customer.NumberOfPoints, ответственный город: @_city</h6>
+
+<!-- кнопка редактирования продавца -->
+<div class="d-grid gap-2 d-md-block">
+	<a href="edittingcustomer?id=@id" class="btn btn-light text-muted mb-1 btn-sm"> <p class="mb-1 ">редактировать</p> </a>
+</div>
+
+<hr />
+<br />
+
+<!-- кнопка вывода отчета -->
+<div class="d-grid gap-2 d-md-block">
+	<a href="customerreport?id=@id" class="btn btn-success mb-2 col-2"> <p class="mb-1 ">Отчет по продажам</p> </a>
+</div>
+
+<hr />
+
+<!-- ввод интервала дат для отображения событий продажи и оплаты -->
+<table class="table">
+	<tbody>
+		<tr>
+			<td>
+				<h6>Дебиторская задолженость: @_debtSize</h6>
+			</td>
+			<td width="25%">
+			<th width="48%">
+				<InputDate @bind-Value="_selectedDateStart" class="form-control"></InputDate>
+			</th>
+			<th width="48%">
+				<InputDate @bind-Value="_selectedDateFinish" class="form-control"></InputDate>
+			</th>
+			<th width="4%">
+				<button @onclick="GetEvents" class="btn btn-success">Обновить</button>
+			</th>
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+<!-- таблица вывода событий продажи и оплаты -->
+<table class="table table-bordered">
+  <thead>
+		<tr class="table-light">
+			<th scope="col"><h5>Продажи</h5></th>
+			<th scope="col"><h5>&nbsp Оплаты</h5></th>
+		</tr>
+  </thead>
+  <tbody>
+		<tr>
+			<td width="46.25%">
+				<div class="list-group">
+					@if (_saleEvents == null)
+					{
+						<p>Загрузка...</p>
+					}
+					else if (_saleEvents.Count == 0)
+					{
+						<p>Нет продаж за выбранный период</p>
+						<div class="d-grid gap-2 d-md-block">
+							<a href="createsaleevent?id=@id" class="btn btn-light text-muted mb-1 btn-sm"><p class="mb-1 ">добавить вручную</p></a>
+						</div>
+					}
+					else
+					{
+						@foreach (var sales in @_sortedSaleEvents)
+						{
+							<p class="mb-1">
+								@sales.SaleName от @sales.SaleDate.ToString("dd.MM.yyyy") - @sales.SaleSumm р., город @ThisCity.GetById(sales.SaleCityId).Result @IsDebt(sales.Id).Result
+								<a href="edittingsaleevent?id=@sales.Id&customerId=@id&pagetoreturn=customerdetails" class="btn text-muted mb-1 btn-sm"> <p class="mb-1 ">🖉</p> </a>
+							</p>
+						}
+
+						<div class="d-grid gap-2 d-md-block">
+							<a href="createsaleevent?id=@id" class="btn btn-light text-muted mb-1 btn-sm"><p class="mb-1 ">добавить вручную</p></a>
+						</div>
+					}
+				</div>
+			</td>
+
+			<td>
+				<div class="list-group">
+					@if (_paymentEvents == null)
+					{
+						<p>Загрузка...</p>
+					}
+					else if (_paymentEvents.Count == 0)
+					{
+						<p>&nbsp Нет оплат за выбранный период</p>
+						<div class="d-grid gap-2 d-md-block">
+							<a href="createpaymentevent?id=@id" class="btn btn-light text-muted mb-1 btn-sm"> <p class="mb-1 ">&nbsp добавить вручную</p> </a>
+						</div>
+					}
+					else
+					{
+						@foreach (var payments in @_sortedPaymentEvents)
+						{
+							<div class="container">
+								<div class="row">
+									<div class="col-md-auto">
+										<p class="mb-1">@payments.PaymentDate.ToString("dd.MM.yyyy") - @payments.PaymentSumm р. <q class="text-muted mb-1">@payments.PaymentText </q>
+											<a href="edittingpaymentevent?id=@payments.Id&customerId=@id&pagetoreturn=customerdetails" class="btn text-muted btn-sm"> <p class="mb-1 ">🖉</p> </a>
+										</p>
+									</div>
+									
+								</div>
+							</div>	
+						}
+						<div class="d-grid gap-2 d-md-block">
+							<a href="createpaymentevent?id=@id" class="btn btn-light text-muted mb-1 btn-sm"> <p class="mb-1 ">&nbsp добавить вручную</p> </a>
+						</div>
+					}
+				</div>
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+
+@code {
+	[Parameter]
+	[SupplyParameterFromQuery]
+	public int id { get; set; }
+
+	private Customer? _customer;
+	private Seller _seller;
+	private City _city;
+	private IReadOnlyCollection<City> _cities;
+	private IReadOnlyCollection<Seller> _sellers;
+	private IReadOnlyCollection<SaleEvent> _saleEvents;
+	private IReadOnlyCollection<PaymentEvent> _paymentEvents;
+	private double _debt;
+	private double _debtLastPart;
+	private string _debtSize;
+	private string _isDebt;
+	private List<SaleEvent> _saleEventsPaid;
+	private List<SaleEvent> _saleEventsUnPaid;
+	private List<SaleEvent> _saleEventsPartPaid;
+	private List<SaleEvent> _saleEventsMayNotToBePaid;
+
+	private IOrderedEnumerable<SaleEvent> _sortedSaleEvents;
+	private IOrderedEnumerable<PaymentEvent> _sortedPaymentEvents;
+
+	private DateTime _selectedDateStart;
+	private DateTime _selectedDateFinish;
+
+	protected override async Task OnInitializedAsync()
+	{
+		try
+		{
+			Logger.LogWarning("Before: {ThreadId}", Environment.CurrentManagedThreadId.ToString());
+
+			_selectedDateStart = DateTime.Today.AddDays(-60);
+			_selectedDateFinish = DateTime.Today;
+			_cities = await ThisCity.GetCities();
+			_sellers = await ThisSeller.GetSellers();
+			_customer = await ThisCustomer.GetById(id);
+			_seller = await ThisSeller.GetById(_customer.SellerId);
+			_city = await ThisCity.GetById(_customer.ResponsibleCityId);
+			_saleEvents = await ThisSaleEvent.GetByDateIntervalAndCustomer(id, _selectedDateStart, _selectedDateFinish);
+			_paymentEvents = await ThisPaymentEvent.GetByDateIntervalAndCustomer(id, _selectedDateStart, _selectedDateFinish);
+
+			_debt = await ThisCustomer.GetDebt(id);
+			if (_debt <= 0) _debtSize = "отсутствует";
+			else _debtSize = _debt.ToString() + " р.";
+
+			_saleEventsMayNotToBePaid = new List<SaleEvent>();
+			_saleEventsUnPaid = new List<SaleEvent>();
+			_saleEventsPartPaid = new List<SaleEvent>();
+			_saleEventsPaid = new List<SaleEvent>();
+
+			_sortedSaleEvents = _saleEvents.OrderByDescending(p => p.SaleName).OrderByDescending(p => p.SaleDate);
+			_sortedPaymentEvents = _paymentEvents.OrderByDescending(p => p.PaymentDate);
+
+			GetEventsLists();
+		}
+		catch (Exception ex)
+		{
+
+		}		
+	}	
+
+	//сортировка накладных согласно статусу оплаты
+	private async Task GetEventsLists()
+	{
+		try
+		{
+			Logger.LogWarning("Before: {ThreadId}", Environment.CurrentManagedThreadId.ToString());
+
+			_saleEventsMayNotToBePaid.Clear();
+			_saleEventsUnPaid.Clear();
+			_saleEventsPartPaid.Clear();
+			_saleEventsPaid.Clear();
+
+			double _debtToSearch = _debt;
+			foreach (var eventitem in _sortedSaleEvents)
+			{
+				if (eventitem.SaleDate >= DateTime.Today.AddDays(-_customer.PaymentDeferment))
+				{
+					_saleEventsMayNotToBePaid.Add(eventitem);
+				}
+
+				else if (_debtToSearch >= eventitem.SaleSumm)
+				{
+					_saleEventsUnPaid.Add(eventitem);
+					_debtToSearch = _debtToSearch - eventitem.SaleSumm;
+				}
+
+				else if (_debtToSearch <= 0)
+				{
+					_saleEventsPaid.Add(eventitem);
+				}
+
+				else if (_debtToSearch < eventitem.SaleSumm)
+				{
+					_saleEventsPartPaid.Add(eventitem);
+					_debtLastPart = _debtToSearch;
+					_debtToSearch = 0;
+				}				
+			}
+		}
+		catch (Exception ex)
+		{
+
+		}
+	}
+
+	//получение статуса накладной согласно дебиторке
+	private async Task<String> IsDebt(int saleid)
+	{
+		try
+		{
+			string res = "";
+			SaleEvent thisItem = await ThisSaleEvent.GetById(saleid);
+
+			if (_saleEventsMayNotToBePaid.Contains(thisItem))
+			{
+				res = "(в отсрочке)";
+			}
+			else if (_saleEventsUnPaid.Contains(thisItem))
+			{
+				res = "(не оплачена)";
+			}
+			else if (_saleEventsPartPaid.Contains(thisItem))
+			{
+				res = "(недоплата " + _debtLastPart + " р.)";
+			}
+			else if (_saleEventsPaid.Contains(thisItem))
+			{
+				res = "";
+			}
+
+			return res;
+		}
+		catch (Exception ex)
+		{
+			return "";
+		}
+	}
+
+	//обновление списка событий продажи и оплаты
+	private async Task GetEvents()
+	{
+		try
+		{
+			Logger.LogWarning("Before: {ThreadId}", Environment.CurrentManagedThreadId.ToString());
+
+			_saleEvents = await ThisSaleEvent.GetByDateIntervalAndCustomer(id, _selectedDateStart, _selectedDateFinish);
+			_paymentEvents = await ThisPaymentEvent.GetByDateIntervalAndCustomer(id, _selectedDateStart, _selectedDateFinish);
+			_sortedSaleEvents = _saleEvents.OrderByDescending(p => p.SaleDate);
+			_sortedPaymentEvents = _paymentEvents.OrderByDescending(p => p.PaymentDate);
+
+			await GetEventsLists();
+		}
+		catch (Exception ex)
+		{
+
+		}
+	}
+}

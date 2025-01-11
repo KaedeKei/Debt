@@ -1,0 +1,169 @@
+﻿@page "/cities"
+@using Shedule.Data
+@using System.ComponentModel.DataAnnotations
+@using Shedule.Models
+@using Shedule.Services
+
+<PageTitle>Customers</PageTitle>
+
+@inject ICity ThisCity
+@inject ILogger<Index> Logger
+
+<!-- блок добавления нового города -->
+<div>
+	<button @onclick="@Toggle" class="btn btn-secondary">Добавление нового города</button>
+
+	<div hidden="@_hideTable">
+		<EditForm Model="_model" OnValidSubmit="ProcessValidForm">
+			<DataAnnotationsValidator />
+
+			<table border="0" cellpadding="10">
+				<tr><td>Название:</td><td><InputText @bind-Value="_model.Name" @onclick="RefreshMessageText" /></td></tr>
+			</table>
+			<div class="add_city_div">@_messageText</div>
+
+			<br /> <input type="submit" value="Сохранить" class="btn btn-success">
+			<ValidationSummary />
+		</EditForm>
+	</div>
+</div>
+
+<hr />
+
+<!-- поле поиска города -->
+<tr><td><InputText @bind-Value="_cityName" /></td><td><button @onclick="Search">Поиск</button></td></tr>
+
+<!-- вывод списка городов -->
+<table class="table">
+	<thead>
+		<tr><th>Название</th><th></th></tr>
+	</thead>
+	<tbody>
+		@if (_cities == null)
+		{
+			<p>Загрузка...</p>
+		}
+		else if (_cities.Count == 0)
+		{
+			<p>Нет Компаний</p>
+		}
+		else
+		{
+			@foreach (var city in @_cities)
+			{
+				<tr>
+					<td>@city.CityName</td>
+					<td>
+						
+					</td>
+					<td>
+						<a href="edittingcity?id=@city.Id" class="btn btn-light text-muted mb-1 btn-sm"> <p class="mb-1 ">редактировать</p> </a>
+					</td>
+				</tr>
+			}
+		}
+	</tbody>
+</table>
+
+@code {
+	private IReadOnlyCollection<City>? _cities;
+	private IReadOnlyCollection<City>? _scities;
+	private string _messageText;
+	private string _cityName;
+	private bool _hideTable;
+
+	protected override async Task OnInitializedAsync()
+	{
+		try
+		{
+			Logger.LogWarning("Before: {ThreadId}", Environment.CurrentManagedThreadId.ToString());
+
+			_cities = await ThisCity.GetCities();
+			if (_cityName == null)
+			{
+				_cities = await ThisCity.GetCities();
+			}
+			_hideTable = true;
+		}
+		catch (Exception ex)
+		{
+
+		}		
+	}
+
+	//поиск городов
+	public async Task Search()
+	{
+		try
+		{
+			if (_cityName == null || _cityName == "")
+			{
+				_cities = await ThisCity.GetCities();
+			}
+			else
+			{
+				_scities = await ThisCity.GetCitiesByName(_cityName);
+				if (_scities == null)
+				{
+					_cities = null;
+				}
+				else
+				{
+					_cities = _scities;
+				}
+			}
+		}
+		catch (Exception ex)
+		{
+
+		}		
+	}
+
+	private FormModel _model = new();
+
+	//создание города
+	private async Task ProcessValidForm()
+	{
+		try
+		{
+			Logger.LogWarning("Before: {ThreadId}", Environment.CurrentManagedThreadId.ToString());
+			City? selectedCity = await ThisCity.GetByName(_model.Name);
+			if (selectedCity == null)
+			{
+				City _city = new City(_model.Name);
+				await ThisCity.AddCity(_city);
+				_messageText = "Город \"" + _model.Name + "\" был успешно сохранен.";
+				_model = new();
+				_cities = await ThisCity.GetCities();
+			}
+			else
+			{
+				_messageText = "Город \"" + _model.Name + "\" не был добавден, т.к. такое имя уже существует.";
+			}
+		}
+		catch (Exception ex)
+		{
+
+		}		
+	}
+
+	//описание модели
+	private class FormModel
+	{
+		[Required(ErrorMessage = "Необходимо заполнить название.")]
+		[MinLength(3, ErrorMessage = "Название должно содержать менее 3-х символов.")]
+		public string Name { get; set; }
+	}
+
+	//очистка результата сохранения изменений при нажатии на поле редактирования
+	private void RefreshMessageText()
+	{
+		_messageText = "";
+	}
+
+	//переключение видимости блока добавления города
+	private void Toggle()
+	{
+		_hideTable = !_hideTable;
+	}
+}

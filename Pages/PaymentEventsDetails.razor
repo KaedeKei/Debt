@@ -1,0 +1,251 @@
+﻿@page "/paymentevents"
+@using Shedule.Data
+@using System.ComponentModel.DataAnnotations
+@using Shedule.Models
+@using Shedule.Services
+@using Excel = Microsoft.Office.Interop.Excel
+
+<PageTitle>PaymentsDetails</PageTitle>
+
+@inject ICustomer ThisCustomer
+@inject ICity ThisCity
+@inject ISeller ThisSeller
+@inject IPaymentEvent ThisPaymentEvent
+@inject NavigationManager NavigationManager
+@inject ILogger<Index> Logger
+
+<!-- блок для загрузки оплат -->
+<div>
+	<p>Переместите файл "Выписки.xlsx" в папку NN" </p>
+	<button @onclick="DownloadEvents" class="btn btn-success">Загрузить</button>
+	<p>@_mes</p>
+</div>
+
+<hr />
+
+<!-- ввод интервала дат для отображения оплат -->
+
+<table class="table">
+	<tbody>
+		<tr>
+			<td>
+			</td>
+			<td width="25%">
+			<th width="48%">
+				<InputDate @bind-Value="_selectedDateStart" class="form-control"></InputDate>
+			</th>
+			<th width="48%">
+				<InputDate @bind-Value="_selectedDateFinish" class="form-control"></InputDate>
+			</th>
+			<th width="4%">
+				<button @onclick="GetEvents" class="btn btn-success">Обновить</button>
+			</th>
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+<!-- таблица вывода оплат -->
+<table class="table table-bordered table-sm">
+	<thead>
+		<tr>
+			<th scope="col">#</th>
+			<th scope="col">Дата</th>
+			<th scope="col">Сумма</th>
+			<th scope="col">Клиент</th>
+			<th scope="col">Расшифровка</th>
+			<th scope="col"></th>
+		</tr>
+	</thead>
+	<tbody>		
+		@foreach (var sales in @_sortedPaymentEvents)
+		{
+			<tr>
+				<th width="5%" scope="row">@(numderOfPayment++)</th>
+				<td width="10%">@sales.PaymentDate.ToString("dd.MM.yyyy")</td>
+				<td width="10%">@sales.PaymentSumm</td>
+				<td>@ThisCustomer.GetById(sales.CustomerId).Result</td>
+				<td width="50%">@sales.PaymentText</td>
+				<td width="7.6%"><a href="edittingpaymentevent?id=@sales.Id&customerId=@sales.CustomerId&pagetoreturn=paymentevents" class="text-muted mb-1"> <p class="mb-1 ">🖉</p> </a></td>
+			</tr>
+		}	
+	</tbody>
+</table>
+
+<!-- служебная переменная для регулирования нумерации таблицы -->
+<p hidden=>@(numderOfPayment = 1)</p>
+
+@code {
+	private Seller _seller;
+	private City _city;
+	private IReadOnlyCollection<City> _cities;
+	private IReadOnlyCollection<Seller> _sellers;
+	private IReadOnlyCollection<Customer> _customers;
+	private IReadOnlyCollection<PaymentEvent> _paymentEvents;
+
+	private IOrderedEnumerable<PaymentEvent> _sortedPaymentEvents;
+
+	private DateTime _selectedDateStart;
+	private DateTime _selectedDateFinish;
+	private int numderOfPayment;
+
+	private string? _filePath;
+	private string? _mes;
+
+	protected override async Task OnInitializedAsync()
+	{
+		try
+		{
+			Logger.LogWarning("Before: {ThreadId}", Environment.CurrentManagedThreadId.ToString());
+
+			_selectedDateStart = DateTime.Today.AddDays(-30);
+			_selectedDateFinish = DateTime.Today;
+			_cities = await ThisCity.GetCities();
+			_sellers = await ThisSeller.GetSellers();
+			_customers = await ThisCustomer.GetCustomers();						
+			_paymentEvents = await ThisPaymentEvent.GetByDateInterval(_selectedDateStart, _selectedDateFinish);
+			_sortedPaymentEvents = _paymentEvents.OrderByDescending(p => p.PaymentDate);
+			numderOfPayment = 1;
+
+			_mes = "";
+		}
+		catch (Exception ex)
+		{
+
+		}		
+	}
+
+	//обновление списка оплат
+	private async Task GetEvents()
+	{
+		try
+		{
+			Logger.LogWarning("Before: {ThreadId}", Environment.CurrentManagedThreadId.ToString());
+
+			_paymentEvents = await ThisPaymentEvent.GetByDateInterval(_selectedDateStart, _selectedDateFinish);
+			_sortedPaymentEvents = _paymentEvents.OrderByDescending(p => p.PaymentDate);
+		}
+		catch (Exception ex)
+		{
+
+		}
+	}
+
+	//импорт из файла
+	private async Task DownloadEvents()
+	{
+		try
+		{
+			string path = @"D:\NN\Выписки.xlsx";
+			await ImportExcel(path);
+			await GetEvents();
+		}
+		catch (Exception ex)
+		{
+
+		}
+	}
+
+	//метод импорта 
+	private async Task ImportExcel(string fileName)
+	{
+		try
+		{
+			Logger.LogWarning("Before: {ThreadId}", Environment.CurrentManagedThreadId.ToString());
+
+			Excel.Application ObjWorkExcel = new Excel.Application();
+			Excel.Workbook ObjWorkBook = ObjWorkExcel.Workbooks.Open(fileName);
+			Excel.Worksheet ObjWorkSheet = (Excel.Worksheet)ObjWorkBook.Sheets[1];
+			var lastCell = ObjWorkSheet.Cells.SpecialCells(Excel.XlCellType.xlCellTypeLastCell);
+			int lastColumn = (int)lastCell.Column;
+			int lastRow = (int)lastCell.Row;
+
+			for (int i = 1; i <= lastRow; i++)
+			{
+				var newDataSum = ObjWorkSheet.Range["B" + i].Value;
+
+				if (newDataSum != null)
+				{
+					string? newStringSum = newDataSum.ToString();
+					double newSum = Convert.ToInt32(newStringSum);
+
+					var newDataSeller = ObjWorkSheet.Range["G" + i].Value;
+					if (newDataSeller != null)
+					{
+						string? newStringSeller = newDataSeller.ToString();
+						Seller? newSeller = await ThisSeller.GetByName(newStringSeller);
+						if (newSeller != null)
+						{
+							var newDataCustomer = ObjWorkSheet.Range["F" + i].Value;
+							if (newDataCustomer != null)
+							{
+								string? newStringCustomer = newDataCustomer.ToString();
+								Customer? newCustomer = await ThisCustomer.GetByINN(newStringCustomer);
+								if (newCustomer != null && newCustomer.IsEnableForDownloadingPayments == true)
+								{
+									var newDataDateTime = ObjWorkSheet.Range["A" + i].Value;									
+									if (newDataDateTime != null)
+									{
+										string? newDateTime = newDataDateTime.ToString();
+										int newDD = Convert.ToInt32(newDateTime.Substring(0, 2));
+										int newMM = Convert.ToInt32(newDateTime.Substring(3, 2));
+										int newYYYY = Convert.ToInt32(newDateTime.Substring(6, 4));
+										DateTime newDate = new DateTime(newYYYY, newMM, newDD);
+
+										var newDataPaymentText = ObjWorkSheet.Range["D" + i].Value;
+										if (newDataPaymentText != null)
+										{
+											string? newPaymentText = newDataPaymentText.ToString();
+											PaymentEvent newEvent = new PaymentEvent(newCustomer.Id, newDate, newSum, newPaymentText);
+
+											PaymentEvent? chechEvent = await ThisPaymentEvent.GetSame(newEvent);
+											if (chechEvent == null)
+											{
+												await ThisPaymentEvent.AddEvent(newEvent);
+											}
+											else
+											{
+												_mes = _mes + "необходимо проверить оплату от " + newEvent.PaymentDate + " от " + ThisCustomer.GetById(newEvent.CustomerId).Result + " на сумму " + newEvent.PaymentSumm + " - такая уже существует. ";
+											}
+										}
+										else
+										{
+										}
+									}
+									else
+									{
+									}
+								}
+								else
+								{
+								}
+							}
+							else
+							{
+								
+							}
+						}
+						else
+						{
+						}
+					}
+					else
+					{
+						
+					}
+				}
+				else
+				{
+				}
+			}
+
+			ObjWorkBook.Close(false, Type.Missing, Type.Missing); //закрыть не сохраняя
+			ObjWorkExcel.Quit(); // выйти из Excel
+			GC.Collect(); // убрать за собой
+		}
+		catch (Exception ex)
+		{
+			_mes = _mes + "ошибочка вышла";
+		}
+	}
+}

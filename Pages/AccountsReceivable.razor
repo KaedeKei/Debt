@@ -1,0 +1,140 @@
+﻿@page "/accountsreceivable"
+@using Shedule.Data
+@using System.ComponentModel.DataAnnotations
+@using Shedule.Models
+@using Shedule.Services
+
+<PageTitle>AccountsReceivable</PageTitle>
+
+@inject ICustomer ThisCustomer
+@inject ICity ThisCity
+@inject ISeller ThisSeller
+@inject NavigationManager NavigationManager
+@inject ILogger<Index> Logger
+
+<!-- выбор города -->
+<table>
+	<tbody class="align-middle form-control bg-success text-white">
+		<tr>
+			<td >
+				Выберите город:
+			</td>
+			<td class="align-middle">
+
+				<InputSelect @bind-Value="_citieId" class="form-control bg-light text-dark" @onclick="Search">
+					@foreach (var city in _cities)
+					{
+						<option value="@city.Id">@city.CityName</option>
+					}
+				</InputSelect>
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+<br />
+
+<!-- список покупателей с отметками о задолжености -->
+<div class="list-group">
+		@if (_сustomers == null)
+		{
+			<p>Загрузка...</p>
+		}
+		else if (_сustomers.Count == 0)
+		{
+			<p>Нет Компаний</p>
+		}
+		else
+		{
+			@foreach (var company in @_сustomers)
+			{
+				<a href="customerdetails?id=@company.Id" class="list-group-item list-group-item-action flex-column align-items-start text-success list-group-item list-group-item-dark">
+					<div class="d-flex w-100 justify-content-between list-group-item list-group-item-action">
+						<h5 class="mb-1 ">@company.CustomerName</h5>
+					@if (IsDebt(company.Id).Result != "задолженость отсутствует") 
+					{
+						<p class="text-danger">@IsDebt(company.Id).Result</p>;
+					}
+					else
+					{
+						<p class="text-success">@IsDebt(company.Id).Result</p>
+					}
+					</div>
+				</a>
+			}
+		}
+</div>
+
+@code {
+	private IReadOnlyCollection<Customer>? _сustomers;
+	private IReadOnlyCollection<Customer>? _sсustomers;
+	private IReadOnlyCollection<City> _cities;
+	private IReadOnlyCollection<Seller> _sellers;
+	public int _citieId;
+	private string _customerName;
+
+	protected override async Task OnInitializedAsync()
+	{
+		try
+		{
+			Logger.LogWarning("Before: {ThreadId}", Environment.CurrentManagedThreadId.ToString());
+
+			_cities = await ThisCity.GetCities();
+			_sellers = await ThisSeller.GetSellers();
+			if (_customerName == null)
+			{
+				_сustomers = await ThisCustomer.GetActiveCustomers();
+			}
+		}
+		catch (Exception ex)
+		{
+
+		}		
+	}
+
+	//поиск по городу
+	public async Task Search()
+	{
+		try
+		{
+			if (_citieId == null || _citieId == 0)
+			{
+				_сustomers = await ThisCustomer.GetCustomers();
+			}
+			else
+			{
+				_sсustomers = await ThisCustomer.GetActiveCustomersByCityId(_citieId);
+				if (_sсustomers == null)
+				{
+					_сustomers = null;
+				}
+
+				else
+				{
+					_сustomers = _sсustomers;
+				}
+			}
+		}
+		catch (Exception ex)
+		{
+
+		}		
+	}	
+
+	//вывод дебиторки
+	private async Task<String> IsDebt(int customerId)
+	{
+		try
+		{
+			string res;
+			double thisDebt = await ThisCustomer.GetDebt(customerId);
+
+			if (thisDebt > 0) return "задолженость " + thisDebt + " р.";
+			else return "задолженость отсутствует";
+		}
+		catch (Exception ex)
+		{
+			return "";
+		}
+	}
+}
