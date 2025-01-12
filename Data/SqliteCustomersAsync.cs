@@ -58,7 +58,7 @@ namespace Shedule.Data
 			var list = new List<Customer>();
 			var newList = _dbContext.Customers.Where(p => p.IsEnable == true && p.ResponsibleCityId == cityId);
 
-			foreach (var item in _dbContext.Customers)
+			foreach (var item in newList)
 			{
 				if (item.IsEnable == true)
 				{
