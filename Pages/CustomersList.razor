@@ -1,0 +1,239 @@
+﻿@page "/customers"
+@using Shedule.Data
+@using System.ComponentModel.DataAnnotations
+@using Shedule.Models
+@using Shedule.Services
+
+<PageTitle>Customers</PageTitle>
+
+@inject ICustomer ThisCustomer
+@inject ICity ThisCity
+@inject ISeller ThisSeller
+@inject ICookie cookie
+@inject NavigationManager NavigationManager
+@inject ILogger<Index> Logger
+
+<!-- блок добавления нового покупателя -->
+<div>
+	<button @onclick="@Toggle" class="btn btn-outline-secondary">Добавление нового покупателя</button>
+
+	<div hidden="@_hideTable">
+		<EditForm Model="_model" OnValidSubmit="ProcessValidForm">
+			<DataAnnotationsValidator />
+
+			<table border="0" cellpadding="10">
+				<tr><td>Название:</td><td><InputText @bind-Value="_model.Name" /></td></tr>
+				<tr><td>ИНН:</td><td><InputText @bind-Value="_model.INN" /></td></tr>
+				<tr><td>Количество точек:</td><td><InputNumber @bind-Value="_model.NumberOfPoints" /></td></tr>
+				<tr>
+					<td>Ответственный город:</td>
+					<td>
+						<InputSelect @bind-Value="_model.ResponsibleCityId" class="form-control">
+							@foreach (var city in _cities)
+							{
+								<option value="@city.Id">@city.CityName</option>
+							}
+						</InputSelect>
+					</td>
+				</tr>
+				<tr>
+					<td>Можно загружать оплаты:</td>
+					<td>
+						<InputSelect @bind-Value="_model.IsEnableForDownloadingPayments" class="form-control">
+							<option value="true">да</option>
+							<option value="false">нет</option>
+						</InputSelect>
+					</td>
+				</tr>
+				<tr>
+					<td>Продавец:</td>
+					<td>
+						<InputSelect @bind-Value="_model.SellerId" class="form-control">
+							@foreach (var seller in _sellers)
+							{
+								<option value="@seller.Id">@seller.SellerName</option>
+							}
+						</InputSelect>
+					</td>
+				</tr>
+
+				<tr><td>Отсрочка:</td><td><InputNumber @bind-Value="_model.PaymentDeferment" /></td></tr>
+
+			</table>
+			<div class="add_customer_div">@_message_text</div>
+
+			<br /> <input type="submit" value="Сохранить" class="btn btn-success">
+			<ValidationSummary />
+		</EditForm>
+	</div>
+</div>
+
+<hr />
+
+<!-- поле поиска города -->
+<tr><td><InputText @bind-Value="_customerName" /></td><td><button @onclick="Search">Поиск</button></td></tr>
+
+<br />
+
+<!-- вывод списка покупателей -->
+<table class="table">
+	<thead>
+	</thead>
+	<tbody>
+		@if (_сustomers == null)
+		{
+			<p>Загрузка...</p>
+		}
+		else if (_сustomers.Count == 0)
+		{
+			<p>Нет Компаний</p>
+		}
+		else
+		{
+			@foreach (var company in @_сustomers)
+			{
+				<tr>
+					<td>
+						<div class="d-flex justify-content-between">
+							<div class="d-flex justify-content-between">
+								<a href="customersettings?id=@company.Id" class="list-group-item-action">
+									<h5 class="mb-1 ">@company.CustomerName</h5>
+								</a>
+								<a href="edittingcustomer?id=@company.Id" class="btn-edit mb-1 btn-sm"> <p class="mb-1 ">редактировать</p> </a>
+							</div>
+							<p class="mb-1">ИНН: @company.INN</p>
+						</div>
+					</td>
+				</tr>
+			}
+		}
+	</tbody>
+</table>
+
+@code {
+	private IReadOnlyCollection<Customer>? _сustomers;
+	private IReadOnlyCollection<Customer>? _sсustomers;
+	private IReadOnlyCollection<City> _cities;
+	private IReadOnlyCollection<Seller> _sellers;
+	private string _message_text;
+	private string _customerName;
+	private bool _hideTable;
+
+	protected override async Task OnInitializedAsync()
+	{
+		try
+		{
+			Logger.LogWarning("Before: {ThreadId}", Environment.CurrentManagedThreadId.ToString());
+			
+			_cities = await ThisCity.GetCities();
+			_sellers = await ThisSeller.GetSellers();
+			if (_customerName == null)
+			{
+				_сustomers = await ThisCustomer.GetCustomers();
+			}
+			_hideTable = true;
+		}
+		catch (Exception ex)
+		{
+
+		}		
+	}
+
+	//поиск покупателей
+	public async Task Search()
+	{
+		try
+		{
+			if (_customerName == null || _customerName == "")
+			{
+				_сustomers = await ThisCustomer.GetCustomers();
+			}
+			else
+			{
+				_sсustomers = await ThisCustomer.GetCustomersByNameOrINN(_customerName);
+				if (_sсustomers == null)
+				{
+					_сustomers = null;
+				}
+
+				else
+				{
+					_сustomers = _sсustomers;
+				}
+			}
+		}
+		catch (Exception ex)
+		{
+
+		}
+	}
+
+	private FormModel _model = new();
+
+	//создание покупателя
+	private async Task ProcessValidForm()
+	{
+		try
+		{
+			Logger.LogWarning("Before: {ThreadId}", Environment.CurrentManagedThreadId.ToString());
+
+			Customer? selectedCustomer = await ThisCustomer.GetFirstByName(_model.Name);
+			if (selectedCustomer == null)
+			{
+				Customer _customer = new Customer(_model.Name, _model.INN, _model.NumberOfPoints, _model.SellerId, _model.ResponsibleCityId, _model.IsEnableForDownloadingPayments, _model.PaymentDeferment);
+				await ThisCustomer.AddCustomer(_customer);
+				_message_text = "Покупатель \"" + _model.Name + "\" был успешно сохранен.";
+				_model = new();
+				_сustomers = await ThisCustomer.GetCustomers();
+			}
+			else
+			{
+				_message_text = "Покупатель \"" + _model.Name + "\" не был добавлен, т.к. такое имя уже существует.";
+			}
+		}
+		catch (Exception ex)
+		{
+
+		}
+	}
+
+	//описание модели
+	private class FormModel
+	{
+		[Required(ErrorMessage = "Необходимо заполнить название.")]
+		[MinLength(3, ErrorMessage = "Название должно содержать не менее 3-х символов.")]
+		public string Name { get; set; }
+
+		[Required(ErrorMessage = "Необходимо заполнить ИНН.")]
+		[MinLength(10, ErrorMessage = "ИНН должен содержать не менее 10 символов.")]
+		[MaxLength(12, ErrorMessage = "ИНН должен содержать не более 12 символов.")]
+		public string INN { get; set; }
+
+		[Required(ErrorMessage = "Необходимо заполнить количество точек.")]
+		public int NumberOfPoints { get; set; }
+
+		[Required(ErrorMessage = "Необходимо выбрать ответственный  город.")]
+		public int ResponsibleCityId { get; set; }
+
+		[Required(ErrorMessage = "Необходимо выбрать.")]
+		public bool IsEnableForDownloadingPayments { get; set; }
+
+		[Required(ErrorMessage = "Необходимо выбрать продавца.")]
+		public int SellerId { get; set; }
+
+		[Required(ErrorMessage = "Необходимо указать отсрочку.")]
+		public int PaymentDeferment { get; set; } 
+	}
+
+	//очистка результата сохранения изменений при нажатии на поле редактирования
+	private void RefreshMessageText()
+	{
+		_message_text = "";
+	}
+
+	//переключение видимости блока добавления покупателя
+	private void Toggle()
+	{
+		_hideTable = !_hideTable;
+	}
+}

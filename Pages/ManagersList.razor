@@ -1,0 +1,174 @@
+﻿@page "/managers"
+@using Shedule.Models
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Microsoft.AspNetCore.Mvc.Rendering
+@using Shedule.Data
+@using Shedule.Models
+@using Shedule.Data
+@using System.ComponentModel.DataAnnotations
+@using Microsoft.AspNetCore.Mvc;
+@using Microsoft.AspNetCore.Mvc.RazorPages;
+@using System.Collections.Generic;
+@using System.Linq;
+@using System.Threading.Tasks;
+@using Microsoft.AspNetCore.Mvc;
+@using Microsoft.AspNetCore.Mvc.RazorPages;
+@using Microsoft.EntityFrameworkCore;
+@using System;
+@using Shedule.Services
+
+@inject IManager Manager
+@inject UsersStatus UserStatus
+@inject ILogger<Index> Logger
+
+<!-- блок добавления нового менеджера -->
+<div>
+	<button @onclick="@Toggle" class="btn btn-secondary">Добавление нового менеджера</button>
+
+	<div hidden="@_hideTable">
+		<EditForm Model="_model" OnValidSubmit="ProcessValidForm">
+			<DataAnnotationsValidator />
+
+			<table border="0" cellpadding="10">
+				<tr><td>Имя:</td><td><InputText @bind-Value="_model.Name" @onclick="RefreshMessageText" /></td></tr>
+				<tr><td>Пароль:</td><td><InputText @bind-Value="_model.Password" @onclick="RefreshMessageText" /></td></tr>
+				<tr>
+					<td>Статус:</td>
+					<td>
+						<InputSelect @bind-Value="_model.Status" class="form-control" @onclick="RefreshMessageText">
+							<option value="@UserStatus.User">@UserStatus.User </option>
+							<option value="@UserStatus.Supervisor">@UserStatus.Supervisor</option>
+							<option value="@UserStatus.Admin">@UserStatus.Admin</option>
+						</InputSelect>
+					</td>
+				</tr>
+			</table>
+			<div class="add_manager_div">@_messageText</div>
+
+			<br /> <input type="submit" value="Сохранить" class="btn btn-success">
+			<ValidationSummary />
+		</EditForm>
+	</div>
+</div>
+
+<hr>
+
+<!-- вывод списка менеджеров -->
+<table class="table">
+	<thead>
+		<tr><th>Имя</th><th>Статус</th><th>Активность</th><th></th></tr>
+	</thead>
+	<tbody>
+		@foreach (var person in @_managers)
+		{
+			<tr>
+				<td>@person.ManagerName</td>
+				<td>
+					@if (@person.ManagerStatus == UserStatus.User)
+					{
+						<p>@UserStatus.User</p>
+					}
+					else if (@person.ManagerStatus == UserStatus.Admin)
+					{
+						<p>@UserStatus.Admin</p>
+					}
+					else
+					{
+						<p>@UserStatus.Supervisor</p>
+					}
+				</td>
+				<td>
+					@if (@person.IsEnable == true)
+					{
+						<p>действующий</p>
+					}
+					else
+					{
+						<p>неактивен</p>
+					}
+				</td>
+				<td>
+					<a href="edittingmanager?id=@person.Id" class="btn btn-light text-muted mb-1 btn-sm"> <p class="mb-1 ">редактировать</p> </a>
+				</td>
+			</tr>
+		}
+	</tbody>
+</table>
+
+@code {
+	private IReadOnlyCollection<Manager>? _managers;
+	private string _messageText;
+	private bool _hideTable;
+
+	protected override async Task OnInitializedAsync()
+	{
+		try
+		{
+			Logger.LogWarning("Before: {ThreadId}", Environment.CurrentManagedThreadId.ToString());
+
+			_managers = await Manager.GetManagers();
+			_model.Status = UserStatus.User;
+			_hideTable = true;
+		}
+		catch (Exception ex)
+		{
+
+		}		
+	}
+
+	//создание менеджера
+	private async Task ProcessValidForm()
+	{
+		try
+		{
+			Logger.LogWarning("Before: {ThreadId}", Environment.CurrentManagedThreadId.ToString());
+
+			Manager? selectedManager = await Manager.GetByName(_model.Name);
+			if (selectedManager == null)
+			{
+				Manager _manager = new Manager(_model.Name, _model.Password, _model.Status, true);
+				await Manager.AddManager(_manager);
+				_messageText = "Менеджер \"" + _model.Name + "\" был успешно сохранен.";
+				_model = new();
+				_managers = await Manager.GetManagers();
+			}
+			else
+			{
+				_messageText = "Менеджер \"" + _model.Name + "\" не был добавлен, т.к. такое имя уже существует.";
+			}
+		}
+		catch (Exception ex)
+		{
+
+		}
+	}
+
+	private FormModel _model = new();
+
+	//описание модели
+	private class FormModel
+	{
+		[Required(ErrorMessage = "Необходимо заполнить имя.")]
+		[MinLength(3, ErrorMessage = "Имя должно содержать менее 3-х символов.")]
+		public string Name { get; set; }
+
+		[Required(ErrorMessage = "Необходимо заполнить пароль.")]
+		[MinLength(3, ErrorMessage = "Пароль должен содержать менее 3-х символов.")]
+		public string Password { get; set; }
+
+		[Required(ErrorMessage = "Необходимо выбрать статус.")]
+		public string Status { get; set; }
+	}
+
+	//очистка результата сохранения изменений при нажатии на поле редактирования
+	private void RefreshMessageText()
+	{
+		_messageText = "";
+	}
+	
+	//переключение видимости блока добавления менеджера
+	private void Toggle()
+	{
+		_hideTable = !_hideTable;
+	}
+}

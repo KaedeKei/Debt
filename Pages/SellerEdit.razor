@@ -1,0 +1,100 @@
+﻿@page "/edittingseller"
+@using Shedule.Data
+@using System.ComponentModel.DataAnnotations
+@using Shedule.Models
+
+<PageTitle>EdittingSellers</PageTitle>
+
+@inject ISeller ThisSeller
+@inject ILogger<Index> Logger
+
+<h2>Редактирование организации</h2>
+
+<hr />
+
+<!-- модель для редактирования полей продавца -->
+<EditForm Model="_model" OnValidSubmit="ProcessValidForm">
+	<DataAnnotationsValidator />
+
+	<table border="0" cellpadding="10">
+		<tr><td>Название:</td><td><InputText @bind-Value="_model.Name" @onclick="RefreshMessageText"/></td></tr>
+		<tr><td>ИНН:</td><td><InputText @bind-Value="_model.INN" @onclick="RefreshMessageText"/></td></tr>		
+	</table>
+	<div class="add_seller_div">@_messageText</div>
+
+	<br />
+	
+	<input type="submit" value="Сохранить" class="btn btn-success">
+	<a href="sellers" class="btn btn-light text-muted">Вернуться к списку </a>
+	<ValidationSummary />
+</EditForm>
+
+@code {
+	[Parameter]
+	[SupplyParameterFromQuery]
+	public int id { get; set; }
+
+	private IReadOnlyCollection<Seller>? _sellers;
+	private string _sellerName;
+	private Seller _thisSeller;
+	private string _messageText;
+
+	protected override async Task OnInitializedAsync()
+	{
+		try
+		{
+			Logger.LogWarning("Before: {ThreadId}", Environment.CurrentManagedThreadId.ToString());
+
+			_sellers = await ThisSeller.GetSellers();
+			if (_sellerName == null)
+			{
+				_thisSeller = await ThisSeller.GetById(id);
+				_model.Name = _thisSeller.SellerName;
+				_model.INN = _thisSeller.INN;
+			}
+		}
+		catch (Exception ex)
+		{
+
+		}
+	}
+
+	private FormModel _model = new();
+
+	//изменение продавца
+	private void ProcessValidForm()
+	{
+		try
+		{
+			Logger.LogWarning("Before: {ThreadId}", Environment.CurrentManagedThreadId.ToString());
+
+			_thisSeller.SellerName = _model.Name;
+			_thisSeller.INN = _model.INN;
+			ThisSeller.Update(_thisSeller);
+			_messageText = "Изменения сохранены.";
+		}
+		catch (Exception ex)
+		{
+
+		}
+	}
+
+	//описание модели
+	private class FormModel
+	{
+		[Required(ErrorMessage = "Необходимо заполнить название.")]
+		[MinLength(3, ErrorMessage = "Название должно содержать не менее 3-х символов.")]
+		public string Name { get; set; }
+
+		[Required(ErrorMessage = "Необходимо заполнить ИНН.")]
+		[MinLength(10, ErrorMessage = "ИНН должен содержать не менее 10 символов.")]
+		[MaxLength(12, ErrorMessage = "ИНН должен содержать не более 12 символов.")]
+		public string INN { get; set; }
+	}
+
+	//очистка результата сохранения изменений при нажатии на поле редактирования
+	private void RefreshMessageText()
+	{
+		_messageText = "";
+	}
+}

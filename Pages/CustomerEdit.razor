@@ -1,0 +1,179 @@
+﻿@page "/edittingcustomer"
+@using Shedule.Data
+@using System.ComponentModel.DataAnnotations
+@using Shedule.Models
+
+<PageTitle>EdittingCustomers</PageTitle>
+
+@inject ICustomer ThisCustomer
+@inject ICity ThisCity
+@inject ISeller ThisSeller
+@inject ILogger<Index> Logger
+
+<h2>Редактирование покупателя</h2>
+
+<hr />
+
+<!-- модель для редактирования полей покупателя -->
+<EditForm Model="_model" OnValidSubmit="ProcessValidForm">
+	<DataAnnotationsValidator />
+
+	<table border="0" cellpadding="10">
+		<tr><td>Название:</td><td><InputText @bind-Value="_model.Name" @onclick="RefreshMessageText"/></td></tr>
+		<tr><td>ИНН:</td><td><InputText @bind-Value="_model.INN" @onclick="RefreshMessageText" /></td></tr>
+		<tr><td>Количество точек:</td><td><InputNumber @bind-Value="_model.NumberOfPoints" @onclick="RefreshMessageText" /></td></tr>
+		<tr>
+			<td>Ответственный город:</td>
+			<td>
+				<InputSelect @bind-Value="_model.ResponsibleCityId" class="form-control" @onclick="RefreshMessageText">
+					@foreach (var city in _cities)
+					{
+						<option value="@city.Id">@city.CityName</option>
+					}
+				</InputSelect>
+			</td>
+		</tr>
+		<tr>
+			<td>Можно загружать оплаты:</td>
+			<td>
+				<InputSelect @bind-Value="_model.IsEnableForDownloadingPayments" class="form-control" @onclick=" RefreshMessageText">
+					<option value="true">да</option>
+					<option value="false">нет</option>
+				</InputSelect>
+			</td>
+		</tr>
+		<tr>
+			<td>Покупатель активен:</td>
+			<td>
+				<InputSelect @bind-Value="_model.IsEnable" class="form-control" @onclick="RefreshMessageText">
+					<option value="true">да</option>
+					<option value="false">нет</option>
+				</InputSelect>
+			</td>
+		</tr>
+		<tr>
+			<td>Продавец:</td>
+			<td>
+				<InputSelect @bind-Value="_model.SellerId" class="form-control" @onclick="RefreshMessageText">
+					@foreach (var seller in _sellers)
+					{
+						<option value="@seller.Id">@seller.SellerName</option>
+					}
+				</InputSelect>
+			</td>
+		</tr>
+
+		<tr><td>Отсрочка:</td><td><InputNumber @bind-Value="_model.PaymentDeferment" @onclick="RefreshMessageText" /></td></tr>
+
+	</table>
+	<div class="add_customer_div">@_messageText</div>
+
+	<br /> <input type="submit" value="Сохранить" class="btn btn-success">
+	<a href="customerdetails?id=@id" class="btn btn-light text-muted">Вернуться к покупателю </a>
+	<ValidationSummary />
+</EditForm>
+
+@code {
+	[Parameter]
+	[SupplyParameterFromQuery]
+	public int id { get; set; }
+
+	private IReadOnlyCollection<Customer>? _сustomers;
+	private IReadOnlyCollection<City> _cities;
+	private IReadOnlyCollection<Seller> _sellers;
+	private string _customerName;
+	private Customer _thisCustomer;
+	private string _messageText;
+
+	protected override async Task OnInitializedAsync()
+	{
+		try
+		{
+			Logger.LogWarning("Before: {ThreadId}", Environment.CurrentManagedThreadId.ToString());
+
+			_cities = await ThisCity.GetCities();
+			_sellers = await ThisSeller.GetSellers();
+			_сustomers = await ThisCustomer.GetCustomers();
+			if (_customerName == null)
+			{
+				_thisCustomer = await ThisCustomer.GetById(id);
+				_model.Name = _thisCustomer.CustomerName;
+				_model.INN = _thisCustomer.INN;
+				_model.NumberOfPoints = _thisCustomer.NumberOfPoints;
+				_model.ResponsibleCityId = _thisCustomer.ResponsibleCityId;
+				_model.IsEnableForDownloadingPayments = _thisCustomer.IsEnableForDownloadingPayments;
+				_model.IsEnable = _thisCustomer.IsEnable;
+				_model.SellerId = _thisCustomer.SellerId;
+				_model.PaymentDeferment = _thisCustomer.PaymentDeferment;
+			}
+		}
+		catch (Exception ex)
+		{
+
+		}
+	}
+
+	private FormModel _model = new();
+
+	//изменение покупателя
+	private void ProcessValidForm()
+	{
+		try
+		{
+			Logger.LogWarning("Before: {ThreadId}", Environment.CurrentManagedThreadId.ToString());
+
+			_thisCustomer.CustomerName = _model.Name;
+			_thisCustomer.INN = _model.INN;
+			_thisCustomer.NumberOfPoints = _model.NumberOfPoints;
+			_thisCustomer.ResponsibleCityId = _model.ResponsibleCityId;
+			_thisCustomer.IsEnableForDownloadingPayments = _model.IsEnableForDownloadingPayments;
+			_thisCustomer.SellerId = _model.SellerId;
+			_thisCustomer.IsEnable = _model.IsEnable;
+			_thisCustomer.PaymentDeferment = _model.PaymentDeferment;
+			ThisCustomer.Update(_thisCustomer);
+			_messageText = "Изменения сохранены.";
+		}
+		catch (Exception ex)
+		{
+
+		}
+	}
+
+	//описание модели
+	private class FormModel
+	{
+		[Required(ErrorMessage = "Необходимо заполнить название.")]
+		[MinLength(3, ErrorMessage = "Название должно содержать не менее 3-х символов.")]
+		public string Name { get; set; }
+
+		[Required(ErrorMessage = "Необходимо заполнить ИНН.")]
+		[MinLength(10, ErrorMessage = "ИНН должен содержать не менее 10 символов.")]
+		[MaxLength(12, ErrorMessage = "ИНН должен содержать не более 12 символов.")]
+		public string INN { get; set; }
+
+		[Required(ErrorMessage = "Необходимо заполнить количество точек.")]
+		public int NumberOfPoints { get; set; }
+
+		[Required(ErrorMessage = "Необходимо выбрать ответственный  город.")]
+		public int ResponsibleCityId { get; set; }
+
+		[Required(ErrorMessage = "Необходимо выбрать.")]
+		public bool IsEnableForDownloadingPayments { get; set; }
+
+		[Required(ErrorMessage = "Необходимо выбрать продавца.")]
+		public int SellerId { get; set; }
+
+		[Required(ErrorMessage = "Необходимо выбрать.")]
+		public bool IsEnable { get; set; }
+
+		[Required(ErrorMessage = "Необходимо указать отсрочку.")]
+		public int PaymentDeferment { get; set; }
+
+	}
+
+	//очистка результата сохранения изменений при нажатии на поле редактирования
+	private void RefreshMessageText()
+	{
+		_messageText = "";
+	}
+}

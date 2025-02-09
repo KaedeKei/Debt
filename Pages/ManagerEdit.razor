@@ -1,0 +1,136 @@
+﻿@page "/edittingmanager"
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Microsoft.AspNetCore.Mvc.Rendering
+@using Shedule.Data
+@using Shedule.Models
+@using Shedule.Data
+@using System.ComponentModel.DataAnnotations
+@using Microsoft.AspNetCore.Mvc;
+@using Microsoft.AspNetCore.Mvc.RazorPages;
+@using System.Collections.Generic;
+@using System.Linq;
+@using System.Threading.Tasks;
+@using Microsoft.AspNetCore.Mvc;
+@using Microsoft.AspNetCore.Mvc.RazorPages;
+@using Microsoft.EntityFrameworkCore;
+@using System;
+@using Shedule.Models;
+@using Shedule.Data;
+
+
+<PageTitle>EdittingManager</PageTitle>
+
+@inject IManager Manager
+@inject UsersStatus UserStatus
+@inject ILogger<Index> Logger
+
+<h2>Редактирование менеджера</h2>
+
+<hr />
+
+<!-- модель для редактирования полей менеджера -->
+<EditForm Model="_model" OnValidSubmit="ProcessValidForm">
+	<DataAnnotationsValidator />
+
+	<table border="0" cellpadding="10">
+		<tr><td>Имя:</td><td><InputText @bind-Value="_model.Name" @onclick="RefreshMessageText" /></td></tr>
+		<tr><td>Пароль:</td><td><InputText @bind-Value="_model.Password" @onclick="RefreshMessageText" /></td></tr>
+		<tr>
+			<td>Статус:</td>
+			<td>
+				<InputSelect @bind-Value="_model.Status" class="form-control" @onclick="RefreshMessageText">
+					<option value="@UserStatus.User">@UserStatus.User</option>
+					<option value="@UserStatus.Supervisor">@UserStatus.Supervisor</option>
+					<option value="@UserStatus.Admin">@UserStatus.Admin</option>
+				</InputSelect>
+			</td>
+		</tr>
+		<tr>
+			<td>Состояние:</td>
+			<td>
+				<InputSelect @bind-Value="_model.IsEnable" class="form-control" @onclick="RefreshMessageText">
+					<option value="true">активен</option>
+					<option value="false">неактивен</option>
+				</InputSelect>
+			</td>
+		</tr>
+	</table>
+	<div class="add_manager_div">@_message_text</div>
+
+	<br /> <input type="submit" value="Сохранить" class="btn btn-success">
+	<a href="managers" class="btn btn-light text-muted">Вернуться к списку </a>
+	<ValidationSummary />
+</EditForm>
+
+@code {
+	[Parameter]
+	[SupplyParameterFromQuery]
+	public int id { get; set; }
+
+	private IReadOnlyCollection<Manager> _managers;
+	private Manager ThisManager;
+	private string _message_text;
+
+	protected override async Task OnInitializedAsync()
+	{
+		try
+		{
+			Logger.LogWarning("Before: {ThreadId}", Environment.CurrentManagedThreadId.ToString());
+			_managers = await Manager.GetManagers();
+			ThisManager = await Manager.GetById(id);
+			_model.Name = ThisManager.ManagerName;
+			_model.Password = ThisManager.ManagerPassword;
+			_model.IsEnable = ThisManager.IsEnable;
+			_model.Status = ThisManager.ManagerStatus;
+		}
+		catch (Exception ex)
+		{
+
+		}
+	}
+
+	private FormModel _model = new();
+
+	//изменение менеджера
+	private void ProcessValidForm()
+	{
+		try
+		{
+			Logger.LogWarning("Before: {ThreadId}", Environment.CurrentManagedThreadId.ToString());
+			ThisManager.ManagerName = _model.Name;
+			ThisManager.IsEnable = _model.IsEnable;
+			ThisManager.ManagerPassword = _model.Password;
+			ThisManager.ManagerStatus = _model.Status;
+			Manager.Update(ThisManager);
+			_message_text = "Изменения сохранены.";
+		}
+		catch (Exception ex)
+		{
+
+		}
+	}
+
+	//описание модели
+	private class FormModel
+	{
+		[Required(ErrorMessage = "Необходимо заполнить имя.")]
+		[MinLength(3, ErrorMessage = "Имя должно содержать менее 3-х символов.")]
+		public string Name { get; set; }
+
+		[Required(ErrorMessage = "Необходимо заполнить пароь.")]
+		[MinLength(3, ErrorMessage = "Пароль должен содержать менее 3-х символов.")]
+		public string Password { get; set; }
+
+		[Required(ErrorMessage = "Необходимо выбрать статус.")]
+		public string Status { get; set; }
+
+		[Required(ErrorMessage = "Необходимо заполнить статус.")]
+		public bool IsEnable { get; set; }
+	}
+
+	//очистка результата сохранения изменений при нажатии на поле редактирования
+	private void RefreshMessageText()
+	{
+		_message_text = "";
+	}
+}

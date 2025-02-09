@@ -1,0 +1,538 @@
+﻿@page "/customersettings"
+@using Shedule.Data
+@using System.ComponentModel.DataAnnotations
+@using Shedule.Models
+@using Shedule.Services
+@using Excel = Microsoft.Office.Interop.Excel
+
+<PageTitle>CustomerSettingss</PageTitle>
+
+@inject ICustomer ThisCustomer
+@inject ICity ThisCity
+@inject ISeller ThisSeller
+@inject ISaleEvent ThisSaleEvent
+@inject IPaymentEvent ThisPaymentEvent
+@inject NavigationManager NavigationManager
+@inject ILogger<Index> Logger
+
+<h2>@_customer.CustomerName</h2>
+<h6>ИНН: @_customer.INN</h6>
+<h6 >Договор с @_seller.SellerName, количество точек: @_customer.NumberOfPoints, ответственный город: @_city</h6>
+
+<!-- кнопка редактирования покупателя -->
+<div class="d-grid gap-2 d-md-block">
+	<a href="edittingcustomer?id=@id" class="btn btn-outline-secondary"> <p class="mb-1 ">редактировать</p> </a>
+</div>
+
+<hr />
+
+<!-- блок удаления и пересоздания накладных и оплат -->
+<div name="EditAllSalrsAndPayments">
+	<div>
+		<button hidden="@_hideDeleteSalesButton" @onclick="@ToggleDeleteSalesButton" class="btn btn-outline-danger mb-2 col-2">удалить все накладные ⨉</button>
+		<button hidden="@_hideShureOrNotDeleteSalesButton" @onclick="@ToggleDeleteSalesButton" class="btn btn-primary mb-2 col-2">не удалять ⨉</button>
+		<button hidden="@_hideShureOrNotDeleteSalesButton" @onclick="@RemoveAllSalesEvent" class="btn btn-danger mb-2 col-3">точно удалить все накладные ⨉</button>
+	</div>
+	
+	<div>
+		<button hidden="@_hideDeletePaymentsButton" @onclick="@ToggleDeletePaymentsButton" class="btn btn-outline-danger mb-2 col-2">удалить все оплаты ⨉</button>
+		<button hidden="@_hideShureOrNotDeletePaymentsButton" @onclick="@ToggleDeletePaymentsButton" class="btn btn-primary mb-2 col-2">не удалять ⨉</button>
+		<button hidden="@_hideShureOrNotDeletePaymentsButton" @onclick="@RemoveAllPaymentsEvent" class="btn btn-danger mb-2 col-3">точно удалить все оплаты ⨉</button>
+	</div>
+	
+	<!-- блок для загрузки накладных -->
+	<div>
+		<h4>Очистить и загрузить из АС:</h4>
+		<InputFile OnChange="DownloadEvents" class="form-control" accept=".xls,.xlsx" />
+	</div>
+	<p>@_mes</p>
+</div>
+
+<hr />
+
+<!-- блок отображения накладных и оплат -->
+<div>
+
+	<div class="d-grid gap-2 d-md-flex justify-content-md-end">
+		<h6 class="col-8">Дебиторская задолженость: @_debtSize</h6>
+		<InputDate @bind-Value="_selectedDateStart" class="form-control mb-2"></InputDate>
+		<InputDate @bind-Value="_selectedDateFinish" class="form-control mb-2"></InputDate>
+		<button @onclick="GetEvents" class="btn btn-success mb-2">Обновить</button>
+	</div>
+
+	<table class="table table-bordered" name="EventsTable">
+		<thead>
+			<tr class="table-light">
+				<th scope="col"><h5>Продажи</h5></th>
+				<th scope="col"><h5>&nbsp Оплаты</h5></th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td width="46.25%">
+					<div class="list-group">
+						@if (_saleEvents == null)
+						{
+							<p>Загрузка...</p>
+						}
+						else if (_saleEvents.Count == 0)
+						{
+							<p>Нет продаж за выбранный период</p>
+							<div class="d-grid gap-2 d-md-block">
+								<a href="createsaleevent?id=@id" class="btn btn-light text-muted mb-1 btn-sm"><p class="mb-1 ">добавить вручную</p></a>
+							</div>
+						}
+						else
+						{
+							@foreach (var sales in @_sortedSaleEvents)
+							{
+								<p class="mb-1">
+									@sales.SaleName от @sales.SaleDate.ToString("dd.MM.yyyy") - @sales.SaleSumm р., город @ThisCity.GetById(sales.SaleCityId).Result @IsDebt(sales.Id).Result
+									<a href="edittingsaleevent?id=@sales.Id&customerId=@id&pagetoreturn=customersettings" class="btn text-muted mb-1 btn-sm"> <p class="mb-1 ">🖉</p> </a>
+								</p>
+							}
+
+							<div class="d-grid gap-2 d-md-block">
+								<a href="createsaleevent?id=@id" class="btn btn-light text-muted mb-1 btn-sm"><p class="mb-1 ">добавить вручную</p></a>
+							</div>
+						}
+					</div>
+				</td>
+
+				<td>
+					<div class="list-group">
+						@if (_paymentEvents == null)
+						{
+							<p>Загрузка...</p>
+						}
+						else if (_paymentEvents.Count == 0)
+						{
+							<p>&nbsp Нет оплат за выбранный период</p>
+							<div class="d-grid gap-2 d-md-block">
+								<a href="createpaymentevent?id=@id" class="btn btn-light text-muted mb-1 btn-sm"> <p class="mb-1 ">&nbsp добавить вручную</p> </a>
+							</div>
+						}
+						else
+						{
+							@foreach (var payments in @_sortedPaymentEvents)
+							{
+								<div class="container">
+									<div class="row">
+										<div class="col-md-auto">
+											<p class="mb-1">
+												@payments.PaymentDate.ToString("dd.MM.yyyy") - @payments.PaymentSumm р. <q class="text-muted mb-1">@payments.PaymentText </q>
+												<a href="edittingpaymentevent?id=@payments.Id&customerId=@id&pagetoreturn=customerdetails" class="btn text-muted btn-sm"> <p class="mb-1 ">🖉</p> </a>
+											</p>
+										</div>
+
+									</div>
+								</div>
+							}
+							<div class="d-grid gap-2 d-md-block">
+								<a href="createpaymentevent?id=@id" class="btn btn-light text-muted mb-1 btn-sm"> <p class="mb-1 ">&nbsp добавить вручную</p> </a>
+							</div>
+						}
+					</div>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+
+@code {
+	[Parameter]
+	[SupplyParameterFromQuery]
+	public int id { get; set; }
+
+	private Customer? _customer;
+	private Seller _seller;
+	private City _city;
+	private IReadOnlyCollection<City> _cities;
+	private IReadOnlyCollection<Seller> _sellers;
+	private IReadOnlyCollection<SaleEvent> _saleEvents;
+	private IReadOnlyCollection<PaymentEvent> _paymentEvents;
+	private double _debt;
+	private double _debtLastPart;
+	private string _debtSize;
+	private string _isDebt;
+	private List<SaleEvent> _saleEventsPaid;
+	private List<SaleEvent> _saleEventsUnPaid;
+	private List<SaleEvent> _saleEventsPartPaid;
+	private List<SaleEvent> _saleEventsMayNotToBePaid;
+
+	private IOrderedEnumerable<SaleEvent> _sortedSaleEvents;
+	private IOrderedEnumerable<PaymentEvent> _sortedPaymentEvents;
+
+	private DateTime _selectedDateStart;
+	private DateTime _selectedDateFinish;
+
+	private bool _hideDeleteSalesButton;
+	private bool _hideShureOrNotDeleteSalesButton;
+	private bool _hideDeletePaymentsButton;
+	private bool _hideShureOrNotDeletePaymentsButton;
+
+	private string? _filePath;
+	private string? _mes;
+
+	protected override async Task OnInitializedAsync()
+	{
+		try
+		{
+			Logger.LogWarning("Before: {ThreadId}", Environment.CurrentManagedThreadId.ToString());
+
+			_selectedDateStart = DateTime.Today.AddDays(-30);
+			_selectedDateFinish = DateTime.Today;
+			_cities = await ThisCity.GetCities();
+			_sellers = await ThisSeller.GetSellers();
+			_customer = await ThisCustomer.GetById(id);
+			_seller = await ThisSeller.GetById(_customer.SellerId);
+			_city = await ThisCity.GetById(_customer.ResponsibleCityId);
+			_saleEvents = await ThisSaleEvent.GetByDateIntervalAndCustomer(id, _selectedDateStart, _selectedDateFinish);
+			_paymentEvents = await ThisPaymentEvent.GetByDateIntervalAndCustomer(id, _selectedDateStart, _selectedDateFinish);
+
+			_debt = await ThisCustomer.GetDebt(id);
+			if (_debt <= 0) _debtSize = "отсутствует";
+			else _debtSize = _debt.ToString() + " р.";
+
+			_saleEventsMayNotToBePaid = new List<SaleEvent>();
+			_saleEventsUnPaid = new List<SaleEvent>();
+			_saleEventsPartPaid = new List<SaleEvent>();
+			_saleEventsPaid = new List<SaleEvent>();
+
+			_sortedSaleEvents = _saleEvents.OrderByDescending(p => p.SaleDate);
+			_sortedPaymentEvents = _paymentEvents.OrderByDescending(p => p.PaymentDate);
+
+			_hideDeleteSalesButton = false;
+			_hideShureOrNotDeleteSalesButton = true;
+			_hideDeletePaymentsButton = false;
+			_hideShureOrNotDeletePaymentsButton = true;
+
+			_mes = "";
+
+			GetEventsLists();
+		}
+		catch (Exception ex)
+		{
+
+		}		
+	}	
+
+	//сортировка накладных согласно статусу оплаты
+	private async Task GetEventsLists()
+	{
+		try
+		{
+			Logger.LogWarning("Before: {ThreadId}", Environment.CurrentManagedThreadId.ToString());
+
+			_saleEventsMayNotToBePaid.Clear();
+			_saleEventsUnPaid.Clear();
+			_saleEventsPartPaid.Clear();
+			_saleEventsPaid.Clear();
+
+			double _debtToSearch = _debt;
+			foreach (var eventitem in _sortedSaleEvents)
+			{
+				if (eventitem.SaleDate >= DateTime.Today.AddDays(-_customer.PaymentDeferment))
+				{
+					_saleEventsMayNotToBePaid.Add(eventitem);
+				}
+
+				else if (_debtToSearch >= eventitem.SaleSumm)
+				{
+					_saleEventsUnPaid.Add(eventitem);
+					_debtToSearch = _debtToSearch - eventitem.SaleSumm;
+				}
+
+				else if (_debtToSearch <= 0)
+				{
+					_saleEventsPaid.Add(eventitem);
+				}
+
+				else if (_debtToSearch < eventitem.SaleSumm)
+				{
+					_saleEventsPartPaid.Add(eventitem);
+					_debtLastPart = _debtToSearch;
+					_debtToSearch = 0;
+				}
+			}
+		}
+		catch (Exception ex)
+		{
+
+		}
+	}
+
+	//получение статуса накладной согласно дебиторке
+	private async Task<String> IsDebt(int saleid)
+	{
+		try
+		{
+			string res = "";
+			SaleEvent thisItem = await ThisSaleEvent.GetById(saleid);
+
+			if (_saleEventsMayNotToBePaid.Contains(thisItem))
+			{
+				res = "(в отсрочке)";
+			}
+			else if (_saleEventsUnPaid.Contains(thisItem))
+			{
+				res = "(не оплачена)";
+			}
+			else if (_saleEventsPartPaid.Contains(thisItem))
+			{
+				res = "(недоплата " + _debtLastPart + " р.)";
+			}
+			else if (_saleEventsPaid.Contains(thisItem))
+			{
+				res = "";
+			}
+
+			return res;
+		}
+		catch (Exception ex)
+		{
+			return "";
+		}
+	}
+
+	//обновление списка событий продажи и оплаты
+	private async Task GetEvents()
+	{
+		try
+		{
+			Logger.LogWarning("Before: {ThreadId}", Environment.CurrentManagedThreadId.ToString());
+
+			_saleEvents = await ThisSaleEvent.GetByDateIntervalAndCustomer(id, _selectedDateStart, _selectedDateFinish);
+			_paymentEvents = await ThisPaymentEvent.GetByDateIntervalAndCustomer(id, _selectedDateStart, _selectedDateFinish);
+			_sortedSaleEvents = _saleEvents.OrderByDescending(p => p.SaleName).OrderByDescending(p => p.SaleDate);
+			_sortedPaymentEvents = _paymentEvents.OrderByDescending(p => p.PaymentDate);
+
+			await GetEventsLists();
+			_debt = await ThisCustomer.GetDebt(id);
+			if (_debt <= 0) _debtSize = "отсутствует";
+			else _debtSize = _debt.ToString() + " р.";
+
+		}
+		catch (Exception ex)
+		{
+
+		}
+	}
+
+	//переключение видимости кнопок при попытке удалить накладные полностью
+	private async Task ToggleDeleteSalesButton()
+	{
+		_hideDeleteSalesButton = !_hideDeleteSalesButton;
+		_hideShureOrNotDeleteSalesButton = !_hideShureOrNotDeleteSalesButton;
+	}
+
+	//переключение видимости кнопок при попытке удалить оаплаты полностью
+	private async Task ToggleDeletePaymentsButton()
+	{
+		_hideDeletePaymentsButton = !_hideDeletePaymentsButton;
+		_hideShureOrNotDeletePaymentsButton = !_hideShureOrNotDeletePaymentsButton;
+	}
+
+	//полное удаление накладных
+	private async Task RemoveAllSalesEvent()
+	{
+		IReadOnlyCollection<SaleEvent> saleEventsToDelete = await ThisSaleEvent.GetByCustomerId(id);
+		foreach (var std in saleEventsToDelete)
+		{
+			await ThisSaleEvent.RemoveEvent(std.Id);
+		}
+		ToggleDeleteSalesButton();
+		GetEvents();
+	}
+
+	//полное удаление накладных
+	private async Task RemoveAllPaymentsEvent()
+	{
+		IReadOnlyCollection<PaymentEvent> saleEventsToDelete = await ThisPaymentEvent.GetByCustomerId(id);
+		foreach (var std in saleEventsToDelete)
+		{
+			await ThisPaymentEvent.RemoveEvent(std.Id);
+		}
+		ToggleDeletePaymentsButton();
+		GetEvents();
+	}
+
+	//импорт из файла
+	private async Task DownloadEvents(InputFileChangeEventArgs e)
+	{
+		try
+		{
+			_mes = "";
+			var saveFolder = Path.Combine("C:\\Temp\\Files");
+			var filePath = Path.Combine(saveFolder, e.File.Name);
+			Directory.CreateDirectory(saveFolder);
+
+			await using FileStream fs = new(filePath, FileMode.Create);
+			await e.File.OpenReadStream().CopyToAsync(fs);
+			await RemoveAllSalesEvent();
+			await RemoveAllPaymentsEvent();
+			await ImportExcel(filePath);
+
+			await GetEvents();
+			_hideDeleteSalesButton = false;
+			_hideShureOrNotDeleteSalesButton = true;
+			_hideDeletePaymentsButton = false;
+			_hideShureOrNotDeletePaymentsButton = true;
+			File.Delete(filePath);
+
+
+			//OnInitializedAsync();
+		}
+		catch (Exception ex)
+		{
+
+		}
+	}
+
+	//метод импорта
+	private async Task ImportExcel(string fileName)
+	{
+		try
+		{
+			Logger.LogWarning("Before: {ThreadId}", Environment.CurrentManagedThreadId.ToString());
+
+			Excel.Application ObjWorkExcel = new Excel.Application();
+			Excel.Workbook ObjWorkBook = ObjWorkExcel.Workbooks.Open(fileName);
+			Excel.Worksheet ObjWorkSheet = (Excel.Worksheet)ObjWorkBook.Sheets[1];
+			var lastCell = ObjWorkSheet.Cells.SpecialCells(Excel.XlCellType.xlCellTypeLastCell);
+			int lastColumn = (int)lastCell.Column;
+			int lastRow = (int)lastCell.Row;
+
+			for (int i = 12; i <= (lastRow - 15); i++)
+			{
+				var newDataDebetSum = ObjWorkSheet.Range["E" + i].Value;
+				if (newDataDebetSum != null)
+				{
+					string? newStringDebetSum = newDataDebetSum.ToString();
+					newStringDebetSum.Replace(',', '.');
+					double newSum = Convert.ToInt32(newStringDebetSum);
+
+					var newDataDateTime = ObjWorkSheet.Range["A" + i].Value;
+					string? newStringDateTime = "";
+					if (newDataDateTime == null)
+					{
+						var newStringDataDateTime = ObjWorkSheet.Range["A2"].Value;
+
+						if (newStringDataDateTime != null)
+						{
+							newStringDateTime = newStringDataDateTime.ToString();
+							newStringDateTime = newStringDateTime.Substring(11, 10);
+						}
+						else
+						{
+							_mes = "В загружаемом акте сверки отсутствует период во второй строке. Выгрузите акт сверки заново и повторите импорт.";
+							break;
+						}
+					}
+					else
+					{
+						newStringDateTime = newDataDateTime.ToString();
+					}
+
+
+					if (newStringDateTime != null)
+					{
+						int newDD = Convert.ToInt32(newStringDateTime.Substring(0, 2));
+						int newMM = Convert.ToInt32(newStringDateTime.Substring(3, 2));
+						int newYYYY = Convert.ToInt32(newStringDateTime.Substring(6, 4));
+						DateTime newDate = new DateTime(newYYYY, newMM, newDD);
+
+						var newDataSaleName = ObjWorkSheet.Range["B" + i].Value;
+						if (newDataSaleName != null)
+						{
+							string? newSaleName = newDataSaleName.ToString().Substring(11);
+							int len = newSaleName.Length - 17;
+							newSaleName = newSaleName.Substring(0, len);
+							Customer newCustomer = await ThisCustomer.GetById(id);
+							int cityId = newCustomer.ResponsibleCityId;
+							SaleEvent newSaleEvent = new SaleEvent(id, newDate, newSum, newSaleName, cityId);
+							await ThisSaleEvent.AddEvent(newSaleEvent);
+						}
+						else
+						{
+						}
+					}
+					else
+					{
+					}
+				}
+			}
+
+			for (int i = 12; i <= (lastRow - 15); i++)
+			{
+				var newDataCreditSum = ObjWorkSheet.Range["F" + i].Value;
+				if (newDataCreditSum != null)
+				{
+					string? newStringCreditSum = newDataCreditSum.ToString();
+					newStringCreditSum.Replace(',', '.');
+					double newSum = Convert.ToInt32(newStringCreditSum);
+
+					var newDataDateTime = ObjWorkSheet.Range["A" + i].Value;
+					string? newStringDateTime = "";
+					if (newDataDateTime == null)
+					{
+						var newStringDataDateTime = ObjWorkSheet.Range["A2"].Value;
+
+						if (newStringDataDateTime != null)
+						{
+							newStringDateTime = newStringDataDateTime.ToString();
+							newStringDateTime = newStringDateTime.Substring(11, 10);
+						}
+						else
+						{
+							_mes = "В загружаемом акте сверки отсутствует период во второй строке. Выгрузите акт сверки заново и повторите импорт.";
+							break;
+						}
+					}
+					else
+					{
+						newStringDateTime = newDataDateTime.ToString();
+					}
+
+					if (newStringDateTime != null)
+					{
+						int newDD = Convert.ToInt32(newStringDateTime.Substring(0, 2));
+						int newMM = Convert.ToInt32(newStringDateTime.Substring(3, 2));
+						int newYYYY = Convert.ToInt32(newStringDateTime.Substring(6, 4));
+						DateTime newDate = new DateTime(newYYYY, newMM, newDD);
+
+						var newDataPaymentText = ObjWorkSheet.Range["B" + i].Value;
+						if (newDataPaymentText != null)
+						{
+							string? newPaymentText = newDataPaymentText.ToString();
+							int len = newPaymentText.Length - 17;
+							newPaymentText = newPaymentText.Substring(0, len);
+
+							PaymentEvent newEvent = new PaymentEvent(id, newDate, newSum, newPaymentText);
+							await ThisPaymentEvent.AddEvent(newEvent);
+						}
+						else
+						{
+						}
+					}
+					else
+					{
+					}
+				}
+				else
+				{
+
+				}
+			}
+
+			ObjWorkBook.Close(false, Type.Missing, Type.Missing); //закрыть не сохраняя
+			ObjWorkExcel.Quit(); // выйти из Excel
+			GC.Collect(); // убрать за собой
+		}
+		catch (Exception ex)
+		{
+			_mes = _mes + "свалились";
+			GC.Collect(); // убрать за собой
+		}
+	}
+}

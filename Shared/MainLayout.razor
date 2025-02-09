@@ -1,0 +1,173 @@
+﻿@using Shedule.Data
+@using Shedule.Models
+@using Shedule.Services
+@inherits LayoutComponentBase
+@inject IHostEnvironment HostEnvironment
+
+@inject ICookie cookie
+@inject NavigationManager NavigationManager
+@inject IManager ThisManager
+@inject UsersStatus UserStatus
+
+<PageTitle>Shedule</PageTitle>
+
+
+
+<div hidden="@HideAuth" class="top px-4 m-xl-4">
+    <div>@_message_text</div>
+    <InputText @bind-Value="_userName" @onclick="RefreshMessageText" placeholder="Логин" />
+    <InputText @bind-Value="_userPassword" @onclick="RefreshMessageText" placeholder="Пароль" />
+    <button @onclick="Authorize">Авторизоваться </button>
+</div>
+
+<div class="page" hidden="@HideMenu">
+    <main>  
+        <div class="top-row px-4 p-3 mb-2 bg-success text-white">
+            <a href=" " class="btn btn-success">
+                <div >
+                    <h6 class="mb-1">Новости</h6>
+                </div>
+            </a>
+
+            <a href="accountsreceivable" class="btn btn-success">
+                <div>
+                    <h6 class="mb-1">Дебиторская задолженность</h6>
+                </div>
+            </a>
+
+            <a href="salesReport" class="btn btn-success">
+                <div>
+                    <h6 class="mb-1">Отчет по продажам</h6>
+                </div>
+            </a>
+
+            <a href="saleevents" class="btn btn-success">
+                <div>
+                    <h6 class="mb-1">Продажи</h6>
+                </div>
+            </a>
+
+            <a href="paymentevents" class="btn btn-success">
+                <div>
+                    <h6 class="mb-1">Оплаты</h6>
+                </div>
+            </a>
+
+            <a href="settings" class="btn btn-success">
+                <div>
+                    <h6 class="mb-1">Настройки</h6>
+                </div>
+            </a>
+            
+            <button class="mx-4 btn btn-light text-success" @onclick="Exit">Выйти </button>
+        </div>
+
+        <article class="content px-4">
+            @Body
+        </article>
+    </main>
+</div>
+
+<div id="blazor-error-ui" data-nosnippet>
+    @if (HostEnvironment.IsProduction())
+    {
+        <span>An error has occurred.</span>
+    }
+    else
+    {
+        <span>An unhandled exception occurred.</span>
+    }
+    <a href="" class="reload">Reload</a>
+    <a class="dismiss">🗙</a>
+</div>
+
+@code {
+
+    private Manager? User;
+    private string? CoockieUserName;
+    private bool HideMenu;
+    private bool HideAuth;
+    private IReadOnlyCollection<Manager>? _managers;
+    private Manager? _selectedManager;
+    private int _selectedManagersId;
+
+    private string _userName;
+    private string _userPassword;
+    private string _message_text;
+    private bool _hideEnter;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            HideMenu = true;
+            HideAuth = false;
+            _managers = await ThisManager.GetActiveManagers();
+            CoockieUserName = await cookie.GetValue("managersName");
+
+            _managers = await ThisManager.GetActiveManagers();
+            _hideEnter = true;
+
+            User = await ThisManager.GetByName(CoockieUserName);
+            if (User.ManagerStatus == UserStatus.Supervisor && User.IsEnable == true)
+            {
+                HideMenu = true;
+                HideAuth = true;
+            }
+            else if (User.ManagerStatus == UserStatus.Admin)
+            {
+                HideMenu = false;
+                HideAuth = true;
+            }
+
+            else if (User.ManagerStatus == UserStatus.User && User.IsEnable == true)
+            {
+                HideMenu = true;
+                _selectedManagersId = User.Id;
+                HideAuth = true;
+            }
+
+            else if (User.ManagerStatus == UserStatus.User && User.IsEnable == false)
+            {
+                HideMenu = true;
+                HideAuth = true;
+            }
+        }
+        catch (Exception ex)
+        {
+
+        }
+
+    }
+
+    private async Task Exit()
+    {
+        await cookie.SetValue("managersName", "");
+        NavigationManager.NavigateTo("route", false);
+        NavigationManager.NavigateTo("");
+    }
+
+    private async Task Authorize()
+    {
+        User = await ThisManager.GetAuthorize(_userName, _userPassword);
+        if (User == null)
+        {
+            _message_text = "такой пользователь не найден";
+        }
+        else
+        {
+            await cookie.SetValue("managersName", User.ManagerName);
+            _message_text = "Вы авторизованы";
+            _hideEnter = false;
+
+            NavigationManager.NavigateTo("route", false);
+            NavigationManager.NavigateTo("");
+        }
+    }
+
+    private void RefreshMessageText()
+    {
+        _message_text = "";
+    }
+}
+

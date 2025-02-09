@@ -1,0 +1,263 @@
+﻿@page "/saleevents"
+@using Shedule.Data
+@using System.ComponentModel.DataAnnotations
+@using Shedule.Models
+@using Shedule.Services
+@using Excel = Microsoft.Office.Interop.Excel;
+
+<PageTitle>SalesDetails</PageTitle>
+
+@inject ICustomer ThisCustomer
+@inject ICity ThisCity
+@inject ISeller ThisSeller
+@inject ISaleEvent ThisSaleEvent
+@inject NavigationManager NavigationManager
+@inject ILogger<Index> Logger
+
+<!-- блок для загрузки накладных -->
+<div>
+	<h4>Выберите файл для загрузки:</h4>
+	<InputFile OnChange="DownloadEvents" class="form-control" accept=".xls,.xlsx" />
+</div>
+@_mes
+
+<hr />
+
+<!-- ввод интервала дат для отображения накладных -->
+<table class="table">
+	<tbody>
+		<tr>
+			<td>
+			</td>
+			<td width="25%">
+			<th width="48%">
+				<InputDate @bind-Value="_selectedDateStart" class="form-control"></InputDate>
+			</th>
+			<th width="48%">
+				<InputDate @bind-Value="_selectedDateFinish" class="form-control"></InputDate>
+			</th>
+			<th>
+				<button @onclick="GetEvents" class="btn btn-success">Обновить</button>
+			</th>
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+<!-- таблица вывода накладных -->
+<table class="table table-bordered table-sm">
+	<thead>
+		<tr>
+			<th scope="col">#</th>
+			<th scope="col">Дата</th>
+			<th scope="col">Номер</th>
+			<th scope="col">Сумма</th>
+			<th scope="col">Клиент</th>
+			<th scope="col">Город</th>
+			<th scope="col"></th>
+		</tr>
+	</thead>
+	<tbody>		
+		@foreach (var sales in @_sortedSaleEvents)
+		{
+			<tr>
+				<th width="5%" scope="row">@(numderOfSale++)</th>
+				<td width="10%">@sales.SaleDate.ToString("dd.MM.yyyy")</td>
+				<td width="10%">@sales.SaleName</td>
+				<td width="10%">@sales.SaleSumm</td>
+				<td>@ThisCustomer.GetById(sales.CustomerId).Result</td>
+				<td>@ThisCity.GetById(sales.SaleCityId).Result</td>
+				<td width="7.6%"><a href="edittingsaleevent?id=@sales.Id&customerId=@sales.CustomerId&pagetoreturn=saleevents" class="text-muted mb-1"> <p class="mb-1 ">🖉</p> </a></td>
+			</tr>
+		}	
+	</tbody>
+</table>
+
+<!-- служебная переменная для регулирования нумерации таблицы -->
+<p hidden=>@(numderOfSale = 1)</p>
+
+@code {
+	private Seller _seller;
+	private City _city;
+	private IReadOnlyCollection<City> _cities;
+	private IReadOnlyCollection<Seller> _sellers;
+	private IReadOnlyCollection<Customer> _customers;
+	private IReadOnlyCollection<SaleEvent> _saleEvents;
+
+	private IOrderedEnumerable<SaleEvent> _sortedSaleEvents;
+
+	private DateTime _selectedDateStart;
+	private DateTime _selectedDateFinish;
+	private int numderOfSale;
+
+	private string? _filePath;
+	private string? _mes;
+
+	protected override async Task OnInitializedAsync()
+	{
+		try
+		{
+			Logger.LogWarning("Before: {ThreadId}", Environment.CurrentManagedThreadId.ToString());
+
+			_selectedDateStart = DateTime.Today.AddDays(-30);
+			_selectedDateFinish = DateTime.Today;
+			_cities = await ThisCity.GetCities();
+			_sellers = await ThisSeller.GetSellers();
+			_customers = await ThisCustomer.GetCustomers();						
+			_saleEvents = await ThisSaleEvent.GetByDateInterval(_selectedDateStart, _selectedDateFinish);
+			_sortedSaleEvents = _saleEvents.OrderByDescending(p => p.SaleName).OrderByDescending(p => p.SaleDate);
+			numderOfSale = 1;
+
+			_mes = "";
+		}
+		catch (Exception ex)
+		{
+
+		}		
+	}
+
+	//обновление списка накладных
+	private async Task GetEvents()
+	{
+		try
+		{
+			Logger.LogWarning("Before: {ThreadId}", Environment.CurrentManagedThreadId.ToString());
+
+			_saleEvents = await ThisSaleEvent.GetByDateInterval(_selectedDateStart, _selectedDateFinish);
+
+			_sortedSaleEvents = _saleEvents.OrderByDescending(p => p.SaleName).OrderByDescending(p => p.SaleDate);
+		}
+		catch (Exception ex)
+		{
+
+		}
+	}
+
+	//импорт из файла
+	private async Task DownloadEvents(InputFileChangeEventArgs e)
+	{
+		try
+		{
+			_mes = "";
+			var saveFolder = Path.Combine("C:\\Temp\\Files");
+			var filePath = Path.Combine(saveFolder, e.File.Name);
+			Directory.CreateDirectory(saveFolder);
+
+			await using FileStream fs = new(filePath, FileMode.Create);
+			await e.File.OpenReadStream().CopyToAsync(fs);
+
+			await ImportExcel(filePath);
+			await GetEvents();
+			_mes = _mes + "файл загружен";
+			File.Delete(filePath);
+		}
+		catch (Exception ex)
+		{
+
+		}
+	}
+
+	//метод импорта
+	private async Task ImportExcel(string fileName)
+	{
+		try
+		{
+			Logger.LogWarning("Before: {ThreadId}", Environment.CurrentManagedThreadId.ToString());
+
+			Excel.Application ObjWorkExcel = new Excel.Application();
+			Excel.Workbook ObjWorkBook = ObjWorkExcel.Workbooks.Open(fileName);
+			Excel.Worksheet ObjWorkSheet = (Excel.Worksheet)ObjWorkBook.Sheets[1];
+			var lastCell = ObjWorkSheet.Cells.SpecialCells(Excel.XlCellType.xlCellTypeLastCell);
+			int lastColumn = (int)lastCell.Column;
+			int lastRow = (int)lastCell.Row;
+
+			for (int i = 1; i <= lastRow; i++)
+			{
+				var newDataCity = ObjWorkSheet.Range["E" + i].Value;
+				if (newDataCity != null)
+				{
+					string? newStringCity = newDataCity.ToString();
+					City? newCity = await ThisCity.GetByName(newStringCity);
+					if (newCity != null)
+					{
+						var newDataCustomer = ObjWorkSheet.Range["D" + i].Value;
+						if (newDataCustomer != null)
+						{
+							string? newStringCustomer = newDataCustomer.ToString();
+							Customer? newCustomer = await ThisCustomer.GetFirstByName(newStringCustomer);
+							if (newCustomer != null)
+							{
+								var newDataSum = ObjWorkSheet.Range["C" + i].Value;
+								if (newDataSum != null)
+								{
+									string? newStringSum = newDataSum.ToString();
+									double newSum = Convert.ToInt32(newStringSum);
+
+									var newDataDateTime = ObjWorkSheet.Range["A" + i].Value;
+									if (newDataDateTime != null)
+									{
+										string? newDateTime = newDataDateTime.ToString();
+										int newDD = Convert.ToInt32(newDateTime.Substring(0, 2));
+										int newMM = Convert.ToInt32(newDateTime.Substring(3, 2));
+										int newYYYY = Convert.ToInt32(newDateTime.Substring(6, 4));
+										DateTime newDate = new DateTime(newYYYY, newMM, newDD);
+
+										var newDataName = ObjWorkSheet.Range["B" + i].Value;
+										if (newDataName != null)
+										{
+											string? newSaleName = newDataName.ToString();
+
+											SaleEvent newEvent = new SaleEvent(newCustomer.Id, newDate, newSum, newSaleName, newCity.Id);
+
+											var chechEvent = await ThisSaleEvent.SameExist(newCustomer.Id, newDate, newSum, newSaleName, newCity.Id);
+											if (chechEvent == false)
+											{
+												await ThisSaleEvent.AddEvent(newEvent);
+											}
+											else
+											{
+												
+											}											
+										}
+										else
+										{
+										}
+									}
+									else
+									{
+									}
+								}
+								else
+								{
+								}
+							}
+							else
+							{
+								_mes = _mes + "Необходимо проверить покупатея  " + newStringCustomer + ", и если он новый, создать в программе и загрузить продажи.";
+							}
+						}
+						else
+						{
+							
+						}						
+					}
+					else
+					{
+					}
+				}
+				else
+				{
+					
+				}				
+			}
+
+			ObjWorkBook.Close(false, Type.Missing, Type.Missing); //закрыть не сохраняя
+			ObjWorkExcel.Quit(); // выйти из Excel
+			GC.Collect(); // убрать за собой
+		}
+		catch (Exception ex)
+		{
+			_mes = _mes + "ошибочка вышла";
+		}
+	}
+}

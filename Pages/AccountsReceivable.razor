@@ -1,0 +1,186 @@
+﻿@page "/accountsreceivable"
+@using Shedule.Data
+@using System.ComponentModel.DataAnnotations
+@using Shedule.Models
+@using Shedule.Services
+
+<PageTitle>AccountsReceivable</PageTitle>
+
+@inject ICustomer ThisCustomer
+@inject ICity ThisCity
+@inject ISeller ThisSeller
+@inject NavigationManager NavigationManager
+@inject ILogger<Index> Logger
+
+<!-- выбор города -->
+<table>
+	<tbody class="align-middle form-control bg-success text-white">
+		<tr>
+			<td >
+				Выберите город:
+			</td>
+			<td class="align-middle">				
+				<InputSelect @bind-Value="_citieIdString" class="form-control bg-light text-dark" @onclick="Search">
+					<option value="none">не выбран</option>
+					@foreach (var city in _cities)
+					{
+						<option value="@city.Id">@city.CityName</option>
+					}
+				</InputSelect>
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+<table class="table">
+	<tbody>
+		<tr>
+			<td width="25%">
+			<th width="48%" class="align-middle">
+				Итого ПДЗ: @_pdz р.
+			</th>
+
+			</td>
+		</tr>
+
+	</tbody>
+</table>
+
+
+<!-- список покупателей с отметками о задолжености -->
+
+<table class="table table-bordered">
+	<thead>
+		<tr class="table-light">
+			<th scope="col"><h5>Покупатель</h5></th>
+			<th scope="col"><h5>Задолженность, руб.</h5></th>
+		</tr>
+	</thead>
+	<tbody>
+		@if (_сustomers == null)
+		{
+			<p>Загрузка...</p>
+		}
+		else if (_сustomers.Count == 0)
+		{
+			<p>Нет Компаний</p>
+		}
+		else
+		{
+			@foreach (var company in @_сustomers)
+			{
+				<tr>
+					<td>
+						<a class="h5" href="customerdetails?id=@company.Id">
+							@company.CustomerName
+						</a>
+					</td>
+
+					<td width="35%">
+						@if (IsDebt(company.Id).Result != 0)
+						{
+							<p class="text-danger">@IsDebt(company.Id).Result</p>;
+						}
+						else
+						{
+							<p class="text-success">отсутствует</p>
+					}
+					</td>
+				</tr>
+			}
+		}
+
+		
+	</tbody>
+</table>
+
+
+@code {
+	private IReadOnlyCollection<Customer>? _сustomers;
+	private IReadOnlyCollection<Customer>? _sсustomers;
+	private IReadOnlyCollection<City> _cities;
+	private IReadOnlyCollection<Seller> _sellers;
+	public int _citieId;
+	public string _citieIdString;
+	private string _customerName;
+	public double _pdz;
+
+	protected override async Task OnInitializedAsync()
+	{
+		try
+		{
+			Logger.LogWarning("Before: {ThreadId}", Environment.CurrentManagedThreadId.ToString());
+
+			_cities = await ThisCity.GetCities();
+			_sellers = await ThisSeller.GetSellers();
+			_citieIdString = "none";
+			_pdz = 0;
+
+			await Search();
+		}
+		catch (Exception ex)
+		{
+
+		}		
+	}
+
+	//поиск по городу
+	public async Task Search()
+	{
+		try
+		{
+			_pdz = 0;
+			if (_citieIdString == null || _citieIdString == "none")
+			{
+				_сustomers = await ThisCustomer.GetCustomers();
+
+				foreach (var item in _сustomers)
+				{
+					_pdz = _pdz + IsDebt(item.Id).Result;
+				}
+			}
+			else
+			{
+				_citieId = Convert.ToInt32(_citieIdString);
+				_sсustomers = await ThisCustomer.GetActiveCustomersByCityId(_citieId);
+				if (_sсustomers == null)
+				{
+					_сustomers = null;
+				}
+
+				else
+				{
+					_сustomers = _sсustomers;
+					foreach (var item in _сustomers)
+					{
+						_pdz = _pdz + IsDebt(item.Id).Result;
+					}
+				}
+			}
+		}
+		catch (Exception ex)
+		{
+
+		}		
+	}	
+
+	//вывод дебиторки
+	private async Task<Double> IsDebt(int customerId)
+	{
+		try
+		{
+			string res;
+			double thisDebt = await ThisCustomer.GetDebt(customerId);
+			if (thisDebt > 0)
+			{
+				return thisDebt;
+			}
+			else return 0;
+
+		}
+		catch (Exception ex)
+		{
+			return 0;
+		}
+	}
+}

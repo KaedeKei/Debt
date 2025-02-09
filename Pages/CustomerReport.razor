@@ -1,0 +1,390 @@
+﻿@page "/customerreport"
+@using Shedule.Data
+@using System.ComponentModel.DataAnnotations
+@using Shedule.Models
+@using Shedule.Services
+
+<PageTitle>CustomerReport</PageTitle>
+
+@inject ICustomer ThisCustomer
+@inject ICity ThisCity
+@inject ISeller ThisSeller
+@inject ISaleEvent ThisSaleEvent
+@inject IPaymentEvent ThisPaymentEvent
+@inject NavigationManager NavigationManager
+@inject ILogger<Index> Logger
+
+<h2>@_customer.CustomerName</h2>
+<h6>ИНН: @_customer.INN</h6>
+<h6 >Договор с @_seller.SellerName, количество точек: @_customer.NumberOfPoints, ответственный город: @_city</h6>
+
+
+<!-- кнопка возврата к покупателю -->
+<div class="d-grid gap-2 d-md-block">
+	<a href="customerdetails?id=@id" class="btn btn-success mb-2 col-2"> <p class="mb-1 ">К покупателю</p> </a>
+</div>
+
+
+<!-- ввод интервала дат для отображения событий продажи и оплаты -->
+<table class="table">
+	<tbody>
+		<tr>			
+			<td width="25%">
+				<th width="48%">
+					<InputDate @bind-Value="_selectedDateStart" class="form-control"></InputDate>
+				</th>
+				<th width="48%">
+					<InputDate @bind-Value="_selectedDateFinish" class="form-control"></InputDate>
+				</th>
+				<th width="4%">
+					<button @onclick="GetEvents" class="btn btn-success">Обновить</button>
+				</th>
+			</td>
+			<td>
+
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+<!-- таблица вывода событий продажи и оплаты -->
+<table class="table table-bordered">
+  <thead>
+  </thead>
+  <tbody>
+		<tr>
+			<h5>
+				Продажи
+			</h5>
+		</tr>
+		<tr>			
+			<td width="35%">
+				
+				<table class="table table-bordered">
+					<thead>
+						<tr class="table-light">
+							<th scope="col"><h5>месяц</h5></th>
+							<th scope="col"><h5>полные продажи</h5></th>
+							<th scope="col"><h5>среднее на точку</h5></th>
+						</tr>
+					</thead>
+					<tbody>
+						@if (_salePairs != null)
+						{
+							@foreach (var sales in @_salePairs)
+							{
+								<tr>
+									<td width="35%">
+										@sales.DateToString()
+									</td>
+									<td>
+										@sales.SaleSum.ToString()
+									</td>
+									<td>
+										@(sales.SaleSum / _customer.NumberOfPoints)
+									</td>
+								</tr>
+							}
+						}
+						else
+						{
+							<p>Данных нет.</p>
+						}
+					</tbody>
+				</table>
+
+			</td>
+			
+
+			<td>
+				<head>
+					<style>
+						.bar1 {
+							width: 50px;
+							height: 100%;
+							display: inline-block;
+							background-color: lightblue;
+							margin-right: 10px;
+						}
+
+					</style>
+				</head>
+				<body style="display: flex; align-items: flex-end">
+					@if (_salePairs != null)
+					{
+						if (_maxSale>0)
+						{
+							@foreach (var sales in @_salePairs)
+							{
+								<div>
+									<div class="bar1" style="height: @Convert.ToInt32((sales.SaleSum* 100/_maxSale))px;"></div>
+									<div>@sales.MonthToString()</div>
+									<div>@sales.MonthYear.Year</div>
+								</div>
+							}
+						}
+						else
+						{
+							
+						}
+					}
+					else
+					{
+						<p>Данных нет.</p>
+					}			
+					
+				</body>
+			</td>
+		</tr>
+
+		<tr>
+			<h5>
+				Оплаты
+			</h5>
+		</tr>
+		<tr>
+			<td width="25%">
+				
+				<table class="table table-bordered">
+					<thead>
+						<tr class="table-light">
+							<th scope="col"><h5>месяц</h5></th>
+							<th scope="col"><h5>оплаты</h5></th>
+						</tr>
+					</thead>
+					<tbody>
+						@if (_salePairs != null)
+						{
+							@foreach (var sales in @_salePairs)
+							{
+								<tr>
+									<td width="47%">
+										@sales.DateToString()
+									</td>
+									<td>
+										@(sales.PaySum)
+									</td>
+								</tr>
+							}
+						}
+						else
+						{
+							<p>Данных нет.</p>
+						}
+					</tbody>
+				</table>
+
+			</td>	
+			<td>
+				<head>
+					<style>
+						.bar2 {
+							width: 50px;
+							height: 100%;
+							display: inline-block;
+							background-color: lightgreen;
+							margin-right: 10px;
+						}
+
+					</style>
+				</head>
+				<body style="display: flex; align-items: flex-end">
+					@if (_salePairs != null)
+					{
+						if (_maxPay>0)
+						{
+							@foreach (var sales in @_salePairs)
+							{
+								<div>
+									<div class="bar2" style="height: @Convert.ToInt32((sales.PaySum* 100/_maxPay))px;"></div>
+									<div>@sales.MonthToString()</div>
+									<div>@sales.MonthYear.Year</div>
+								</div>
+							}
+						}
+						else
+						{
+							
+						}
+					}
+					else
+					{
+						<p>Данных нет.</p>
+					}
+
+				</body>
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+
+
+
+@code {
+	[Parameter]
+	[SupplyParameterFromQuery]
+	public int id { get; set; }
+
+	private Customer? _customer;
+	private Seller _seller;
+	private City _city;
+	private IReadOnlyCollection<City> _cities;
+	private IReadOnlyCollection<Seller> _sellers;
+	private IReadOnlyCollection<SaleEvent> _saleEvents;
+	private IReadOnlyCollection<PaymentEvent> _paymentEvents;
+
+	private IOrderedEnumerable<SaleEvent> _sortedSaleEvents;
+	private IOrderedEnumerable<PaymentEvent> _sortedPaymentEvents;
+
+	private DateTime _selectedDateStart;
+	private DateTime _selectedDateFinish;
+
+	private List<MonthAndSum> _salePairs;
+	private List<MonthAndSum> _paymentPairs;
+
+
+	private List<double> _sales;
+	private double _maxSale;
+	private List<double> _pays;
+	private double _maxPay;
+
+	string _messageText;
+
+	protected override async Task OnInitializedAsync()
+	{
+		try
+		{
+			Logger.LogWarning("Before: {ThreadId}", Environment.CurrentManagedThreadId.ToString());
+
+			_selectedDateStart = DateTime.Today.AddDays(-30);
+			_selectedDateFinish = DateTime.Today;
+			_cities = await ThisCity.GetCities();
+			_sellers = await ThisSeller.GetSellers();
+			_customer = await ThisCustomer.GetById(id);
+
+			_seller = await ThisSeller.GetById(_customer.SellerId);
+			_city = await ThisCity.GetById(_customer.ResponsibleCityId);
+
+			_saleEvents = await ThisSaleEvent.GetByDateIntervalAndCustomer(id, _selectedDateStart, _selectedDateFinish);
+			_paymentEvents = await ThisPaymentEvent.GetByDateIntervalAndCustomer(id, _selectedDateStart, _selectedDateFinish);
+			_sortedSaleEvents = _saleEvents.OrderBy(p => p.SaleDate);
+			_sortedPaymentEvents = _paymentEvents.OrderBy(p => p.PaymentDate);
+
+			await GetSalesLists();
+		}
+		catch (Exception ex)
+		{
+
+		}		
+	}	
+
+	//получение списка накладных по месяцам
+	private async Task GetSalesLists()
+	{
+		try
+		{
+			List<MonthAndSum> newSalePairs = new List<MonthAndSum>();
+			_sales = new List<double>();
+			_pays = new List<double>();
+
+			var startDate = _selectedDateStart;
+			var startMonth = Convert.ToInt32(_selectedDateStart.ToString().Substring(3, 2));
+			var startYear = Convert.ToInt32(_selectedDateStart.ToString().Substring(6, 4));
+			var startCircleDate = new DateTime(startYear, startMonth, 1);
+			var finishCircleDate = startCircleDate.AddMonths(1).AddDays(-1);
+
+			var finishMonth = Convert.ToInt32(_selectedDateFinish.ToString().Substring(3, 2));
+			var finishYear = Convert.ToInt32(_selectedDateFinish.ToString().Substring(6, 4));
+			var finishPreDate = new DateTime(startYear, startMonth, 1);
+			var finishDate = _selectedDateFinish.AddMonths(1).AddDays(-1);
+
+			while (startCircleDate <= _selectedDateFinish)
+			{
+				MonthAndSum newPair = new MonthAndSum();
+				newPair.MonthYear = startCircleDate;
+				newPair.SaleSum = _sortedSaleEvents.Where(p => p.SaleDate >= startDate && p.SaleDate <= finishCircleDate && p.CustomerId == id)
+														.Sum(u => u.SaleSumm);
+
+				newPair.PaySum = _sortedPaymentEvents.Where(r => r.PaymentDate >= startDate && r.PaymentDate <= finishCircleDate && r.CustomerId == id)
+														.Sum(v => v.PaymentSumm);
+				_messageText = _messageText + newPair.SaleSum.ToString();
+				newSalePairs.Add(newPair);
+				startCircleDate = startCircleDate.AddMonths(1);
+				startDate = startCircleDate;
+				_messageText = _messageText + startDate.ToString();
+				finishCircleDate = startDate.AddMonths(1).AddDays(-1);
+				_messageText = _messageText + finishCircleDate.ToString();
+			}
+
+			_salePairs = newSalePairs;
+
+			foreach (var item in _salePairs)
+			{
+				_sales.Add(item.SaleSum);
+			}
+			_maxSale = _sales.Max();
+
+			foreach (var item in _salePairs)
+			{
+				_pays.Add(item.SaleSum);
+			}
+			_maxPay = _pays.Max();
+
+		}
+		catch (Exception ex)
+		{
+
+		}
+	}
+
+
+
+	//обновление списка событий продажи и оплаты
+	private async Task GetEvents()
+	{
+		try
+		{
+			Logger.LogWarning("Before: {ThreadId}", Environment.CurrentManagedThreadId.ToString());
+
+			_saleEvents = await ThisSaleEvent.GetByDateIntervalAndCustomer(id, _selectedDateStart, _selectedDateFinish);
+			_paymentEvents = await ThisPaymentEvent.GetByDateIntervalAndCustomer(id, _selectedDateStart, _selectedDateFinish);
+			_sortedSaleEvents = _saleEvents.OrderBy(p => p.SaleDate);
+			_sortedPaymentEvents = _paymentEvents.OrderBy(p => p.PaymentDate);
+
+			await GetSalesLists();
+		}
+		catch (Exception ex)
+		{
+
+		}
+	}
+
+	public class MonthAndSum
+	{
+		public DateTime MonthYear { get; set; }
+		public double SaleSum { get; set; }
+		public double PaySum { get; set; }
+
+		public MonthAndSum()
+		{
+		}
+
+		public MonthAndSum(DateTime monthYear, double saleSum, double paySum)
+		{
+			MonthYear = monthYear;
+			SaleSum = saleSum;
+			PaySum = paySum;
+		}
+
+		public string DateToString()
+		{
+			return MonthYear.ToString("MMMM yyyy");
+		}
+
+		public string MonthToString()
+		{
+			return MonthYear.ToString("MMMM");
+		}
+	}
+}

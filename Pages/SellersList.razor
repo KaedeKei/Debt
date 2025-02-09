@@ -1,0 +1,177 @@
+﻿@page "/sellers"
+@using Shedule.Data
+@using System.ComponentModel.DataAnnotations
+@using Shedule.Models
+@using Shedule.Services
+
+<PageTitle>Customers</PageTitle>
+
+@inject ISeller ThisSeller
+@inject ILogger<Index> Logger
+
+<!-- блок добавления нового продавца -->
+<div>
+	<button @onclick="@Toggle" class="btn btn-secondary">Добавление новой организации</button>
+
+	<div hidden="@_hideTable">
+		<EditForm Model="_model" OnValidSubmit="ProcessValidForm">
+			<DataAnnotationsValidator />
+
+			<table border="0" cellpadding="10">
+				<tr><td>Название:</td><td><InputText @bind-Value="_model.Name" @onclick="RefreshMessageText" /></td></tr>
+				<tr><td>ИНН:</td><td><InputText @bind-Value="_model.INN" @onclick="RefreshMessageText" /></td></tr>
+			</table>
+
+			<div class="add_seller_div">@_messageText</div>
+
+			<br />
+
+			<input type="submit" value="Сохранить" class="btn btn-success">
+			<ValidationSummary />
+		</EditForm>
+	</div>
+</div>
+
+<hr />
+
+<!-- поле поиска продавцов -->
+<tr><td><InputText @bind-Value="_sellerName" /></td><td><button @onclick="Search">Поиск</button></td></tr>
+
+<!-- вывод списка продавцов -->
+<table class="table">
+	<thead>
+		<tr><th>Название</th><th></th></tr>
+	</thead>
+	<tbody>
+		@if (_sellers == null)
+		{
+			<p>Загрузка...</p>
+		}
+		else if (_sellers.Count == 0)
+		{
+			<p>Нет Компаний</p>
+		}
+		else
+		{
+			@foreach (var company in @_sellers)
+			{
+				<tr>
+					<td>@company.SellerName</td>					
+					<td>
+						<a href="edittingseller?id=@company.Id" class="btn btn-light text-muted mb-1 btn-sm"> <p class="mb-1 ">редактировать</p> </a>
+					</td>
+				</tr>
+			}
+		}
+	</tbody>
+</table>
+
+@code {
+	private IReadOnlyCollection<Seller>? _sellers;
+	private IReadOnlyCollection<Seller>? _searchingSellers;
+	private string _messageText;
+	private string _sellerName;
+	private bool _hideTable;
+
+	protected override async Task OnInitializedAsync()
+	{
+		try
+		{
+			Logger.LogWarning("Before: {ThreadId}", Environment.CurrentManagedThreadId.ToString());			
+
+			_sellers = await ThisSeller.GetSellers();
+			if (_sellerName == null)
+			{
+				_sellers = await ThisSeller.GetSellers();
+			}
+			_hideTable = true;
+		}
+		catch (Exception ex)
+		{
+
+		}		
+	}
+
+	//поиск продавцов
+	public async Task Search()
+	{
+		try
+		{
+			if (_sellerName == null || _sellerName == "")
+			{
+				_sellers = await ThisSeller.GetSellers();
+			}
+			else
+			{
+				_searchingSellers = await ThisSeller.GetSellersByName(_sellerName);
+				if (_searchingSellers == null)
+				{
+					_sellers = null;
+				}
+
+				else
+				{
+					_sellers = _searchingSellers;
+				}
+			}
+		}
+		catch (Exception ex)
+		{
+
+		}
+	}
+
+	private FormModel _model = new();
+
+	//создание продавцов
+	private async Task ProcessValidForm()
+	{
+		try
+		{
+			Logger.LogWarning("Before: {ThreadId}", Environment.CurrentManagedThreadId.ToString());
+
+			Seller? selectedSeller = await ThisSeller.GetByName(_model.Name);
+			if (selectedSeller == null)
+			{
+				Seller _seller = new Seller(_model.Name, _model.INN);
+				await ThisSeller.AddSeller(_seller);
+				_messageText = "Организация \"" + _model.Name + "\" была успешно сохранена.";
+				_model = new();
+				_sellers = await ThisSeller.GetSellers();
+			}
+			else
+			{
+				_messageText = "Организация \"" + _model.Name + "\" не была добавдена, т.к. такое имя уже существует.";
+			}
+		}
+		catch (Exception ex)
+		{
+
+		}
+	}
+
+	//описание модели
+	private class FormModel
+	{
+		[Required(ErrorMessage = "Необходимо заполнить название.")]
+		[MinLength(3, ErrorMessage = "Название должно содержать не менее 3-х символов.")]
+		public string Name { get; set; }
+
+		[Required(ErrorMessage = "Необходимо заполнить ИНН.")]
+		[MinLength(10, ErrorMessage = "ИНН должен содержать не менее 10 символов.")]
+		[MaxLength(12, ErrorMessage = "ИНН должен содержать не более 12 символов.")]
+		public string INN { get; set; }
+	}
+
+	//очистка результата сохранения изменений при нажатии на поле редактирования
+	private void RefreshMessageText()
+	{
+		_messageText = "";
+	}
+
+	//переключение видимости блока добавления города
+	private void Toggle()
+	{
+		_hideTable = !_hideTable;
+	}
+}

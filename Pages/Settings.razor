@@ -1,0 +1,46 @@
+﻿@page "/settings"
+@using AltairCA.Blazor.WebAssembly.Cookie
+@using Shedule.Data
+@using System.ComponentModel.DataAnnotations
+@using Shedule.Models
+@using System.Globalization
+@using Shedule.Services
+
+
+<PageTitle>Index</PageTitle>
+
+@inject IManager ThisManager
+@inject ILogger<Index> Logger
+
+<!-- список настраиваемых групп объектов -->
+<div>
+	<div class="list-group">
+        <a href="customers" class="list-group-item list-group-item-action flex-column align-items-start">
+            <div class="d-flex w-100 justify-content-between">
+                <h5 class="mb-1">Покупатели</h5>               
+            </div>
+            <p class="mb-1">Редактировать/добавить покупателя.</p>
+        </a>
+
+        <a href="cities" class="list-group-item list-group-item-action flex-column align-items-start">
+            <div class="d-flex w-100 justify-content-between">
+                <h5 class="mb-1">Города</h5>               
+            </div>
+            <p class="mb-1">Редактировать/добавить города.</p>
+        </a>
+
+        <a href="sellers" class="list-group-item list-group-item-action flex-column align-items-start">
+            <div class="d-flex w-100 justify-content-between">
+                <h5 class="mb-1">Организации</h5>
+            </div>
+            <p class="mb-1">Редактировать/добавить организации, с которых производятся продажи.</p>
+        </a>
+
+        <a href="managers" class="list-group-item list-group-item-action flex-column align-items-start">
+            <div class="d-flex w-100 justify-content-between">
+                <h5 class="mb-1">Менеджеры</h5>
+            </div>
+            <p class="mb-1">Редактировать/добавить менеджеров, у которых есть доступ к программе.</p>
+        </a>
+    </div>
+</div>

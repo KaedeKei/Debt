@@ -1,0 +1,143 @@
+﻿@page "/createsaleevent"
+@using Shedule.Data
+@using System.ComponentModel.DataAnnotations
+@using Shedule.Models
+
+<PageTitle>CreateSaleEvent</PageTitle>
+
+@inject ISaleEvent ThisSaleEvent
+@inject ICity ThisCity
+@inject ICustomer ThisCustomer
+@inject ILogger<Index> Logger
+
+<h2>Создание новой накладной</h2>
+
+<hr />
+
+<!-- поля для ввода -->
+<table border="0" cellpadding="10">
+	<tr>
+		<td>Название:</td>
+		<td><InputText @bind-Value=@_saleName @onclick="RefreshMessageText" /></td>
+		</tr>
+	
+	<tr>
+		<td>Покупатель:</td>
+		<td>
+			<InputSelect @bind-Value=@_customerId>
+				@foreach (var customer in _customers)
+				{
+					<option value="@customer.Id">@customer.CustomerName</option>
+				}
+			</InputSelect>
+		</td>
+	</tr>
+
+	<tr>
+		<td>Дата:</td>
+		<td>
+			<InputDate @bind-Value=@_date class="form-control" @onclick="RefreshMessageText"></InputDate>
+		</td>
+	</tr>
+
+	<tr><td>Сумма:</td><td><InputNumber @bind-Value=@_saleSum @onclick="RefreshMessageText" /></td></tr>
+	
+	<tr>
+		<td>Город:</td>
+		<td>
+			<InputSelect @bind-Value=@_cityId>
+				@foreach (var city in _cities)
+				{
+					<option value="@city.Id">@city.CityName</option>
+				}
+			</InputSelect>
+		</td>
+	</tr>
+
+</table>
+
+<!-- вывод результата сохранения изменений -->
+<div>@_messageText</div>
+
+<br />
+
+<!-- кнопки сохранения или возврата к списку -->
+<div>
+	<button @onclick="AddEvent" class="btn btn-success">Сохранить</button>
+	<a href="customerdetails?id=@id" class="btn btn-light text-muted">Вернуться к списку</a>
+</div>
+
+@code {
+	[Parameter]
+	[SupplyParameterFromQuery]
+	public int id { get; set; }
+
+	private SaleEvent? _event;
+	private IReadOnlyCollection<City> _cities;
+	private IReadOnlyCollection<Customer> _customers;
+	private int _customerId;
+	private Customer _customer;
+	private DateTime _date;
+	private double _saleSum;
+	private string _saleName;
+	private int _cityId;
+	string _messageText;
+
+	protected override async Task OnInitializedAsync()
+	{
+		try
+		{
+			Logger.LogWarning("Before: {ThreadId}", Environment.CurrentManagedThreadId.ToString());
+
+			_cities = await ThisCity.GetCities();
+			_customers = await ThisCustomer.GetCustomers();
+			_customerId = id;
+			_date = DateTime.Today;
+			_customer = await ThisCustomer.GetById(id);
+			_cityId = _customer.ResponsibleCityId;
+		}
+		catch (Exception ex)
+		{
+
+		}		
+	}
+
+	//создание закупки
+	private async Task AddEvent()
+	{
+		try
+		{
+			Logger.LogWarning("Before: {ThreadId}", Environment.CurrentManagedThreadId.ToString());
+
+			if (_date != null && _customerId != 0 && _saleSum != 0 && _saleName != null && _cityId != null)
+			{
+				SaleEvent? selectedSaleEvent = await ThisSaleEvent.GetByName(_saleName);
+				if (selectedSaleEvent == null)
+				{
+					SaleEvent _saleEvent = new SaleEvent(_customerId, _date, _saleSum, _saleName, _cityId);
+					await ThisSaleEvent.AddEvent(_saleEvent);
+					_messageText = "Накладная была успешно сохранена.";
+				}
+				else
+				{
+					_messageText = "Накладная не была добавлена, т.к. такое имя уже существует.";
+				}
+			}
+			else if (_date == null) { _messageText = "необходимо указать дату"; }
+			else if (_customerId == null) { _messageText = "необходимо выбрать покупателя"; }
+			else if (_cityId == 0) { _messageText = "необходимо выбрать город"; }
+			else if (_saleSum == 0) { _messageText = "необходимо указать сумму"; }
+			else if (_saleName == null) { _messageText = "необходимо указать содержание"; }
+		}
+		catch (Exception ex)
+		{
+
+		}		
+	}
+
+	//очистка результата сохранения изменений при нажатии на поле редактирования
+	private void RefreshMessageText()
+	{
+		_messageText = "";
+	}
+}

@@ -1,0 +1,131 @@
+is_global = true
+build_property.TargetFramework = net7.0
+build_property.TargetPlatformMinVersion = 
+build_property.UsingMicrosoftNETSdkWeb = true
+build_property.ProjectTypeGuids = 
+build_property.InvariantGlobalization = 
+build_property.PlatformNeutralAssembly = 
+build_property.EnforceExtendedAnalyzerRules = 
+build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property.RootNamespace = Shedule
+build_property.RootNamespace = Shedule
+build_property.ProjectDir = C:\Users\Kei\Desktop\Debt3\
+build_property.EnableComHosting = 
+build_property.EnableGeneratedComInterfaceComImportInterop = 
+build_property.RazorLangVersion = 7.0
+build_property.SupportLocalizedComponentNames = 
+build_property.GenerateRazorMetadataSourceChecksumAttributes = 
+build_property.MSBuildProjectDirectory = C:\Users\Kei\Desktop\Debt3
+build_property._RazorSourceGeneratorDebug = 
+
+[C:/Users/Kei/Desktop/Debt3/App.razor]
+build_metadata.AdditionalFiles.TargetPath = QXBwLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Kei/Desktop/Debt3/Pages/AccountsReceivable.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWNjb3VudHNSZWNlaXZhYmxlLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Kei/Desktop/Debt3/Pages/CitiesList.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ2l0aWVzTGlzdC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Kei/Desktop/Debt3/Pages/CityEdit.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ2l0eUVkaXQucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Kei/Desktop/Debt3/Pages/CustomerDetails.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ3VzdG9tZXJEZXRhaWxzLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Kei/Desktop/Debt3/Pages/CustomerEdit.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ3VzdG9tZXJFZGl0LnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Kei/Desktop/Debt3/Pages/CustomerReport.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ3VzdG9tZXJSZXBvcnQucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Kei/Desktop/Debt3/Pages/CustomerSettings.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ3VzdG9tZXJTZXR0aW5ncy5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Kei/Desktop/Debt3/Pages/CustomersList.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ3VzdG9tZXJzTGlzdC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Kei/Desktop/Debt3/Pages/Index.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSW5kZXgucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Kei/Desktop/Debt3/Pages/ManagerEdit.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTWFuYWdlckVkaXQucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Kei/Desktop/Debt3/Pages/ManagersList.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTWFuYWdlcnNMaXN0LnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Kei/Desktop/Debt3/Pages/PaymentEventCreate.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUGF5bWVudEV2ZW50Q3JlYXRlLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Kei/Desktop/Debt3/Pages/PaymentEventEdit .razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUGF5bWVudEV2ZW50RWRpdCAucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Kei/Desktop/Debt3/Pages/PaymentEventsDetails.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUGF5bWVudEV2ZW50c0RldGFpbHMucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Kei/Desktop/Debt3/Pages/SaleEventCreate.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2FsZUV2ZW50Q3JlYXRlLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Kei/Desktop/Debt3/Pages/SaleEventEdit.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2FsZUV2ZW50RWRpdC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Kei/Desktop/Debt3/Pages/SaleEventsDetails.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2FsZUV2ZW50c0RldGFpbHMucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Kei/Desktop/Debt3/Pages/SalesReport.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2FsZXNSZXBvcnQucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Kei/Desktop/Debt3/Pages/SellerEdit.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2VsbGVyRWRpdC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Kei/Desktop/Debt3/Pages/SellersList.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2VsbGVyc0xpc3QucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Kei/Desktop/Debt3/Pages/Settings.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2V0dGluZ3MucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Kei/Desktop/Debt3/Shared/SurveyPrompt.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXFN1cnZleVByb21wdC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Kei/Desktop/Debt3/_Imports.razor]
+build_metadata.AdditionalFiles.TargetPath = X0ltcG9ydHMucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Kei/Desktop/Debt3/Shared/MainLayout.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXE1haW5MYXlvdXQucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = b-yk3p4qf3jn
+
+[C:/Users/Kei/Desktop/Debt3/Shared/NavMenu.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXE5hdk1lbnUucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = b-70zi3g1il1
+
+[C:/Users/Kei/Desktop/Debt3/Pages/Error.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRXJyb3IuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Kei/Desktop/Debt3/Pages/_Host.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcX0hvc3QuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 

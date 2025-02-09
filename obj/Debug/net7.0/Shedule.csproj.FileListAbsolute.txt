@@ -1,0 +1,411 @@
+D:\Program Files\C#Projects\source\repos\Shedule\bin\Debug\net7.0\appsettings.Development.json
+D:\Program Files\C#Projects\source\repos\Shedule\bin\Debug\net7.0\appsettings.json
+D:\Program Files\C#Projects\source\repos\Shedule\bin\Debug\net7.0\Shedule.staticwebassets.runtime.json
+D:\Program Files\C#Projects\source\repos\Shedule\bin\Debug\net7.0\Shedule.exe
+D:\Program Files\C#Projects\source\repos\Shedule\bin\Debug\net7.0\Shedule.deps.json
+D:\Program Files\C#Projects\source\repos\Shedule\bin\Debug\net7.0\Shedule.runtimeconfig.json
+D:\Program Files\C#Projects\source\repos\Shedule\bin\Debug\net7.0\Shedule.dll
+D:\Program Files\C#Projects\source\repos\Shedule\bin\Debug\net7.0\Shedule.pdb
+D:\Program Files\C#Projects\source\repos\Shedule\bin\Debug\net7.0\AltairCA.Blazor.WebAssembly.Cookie.dll
+D:\Program Files\C#Projects\source\repos\Shedule\bin\Debug\net7.0\Humanizer.dll
+D:\Program Files\C#Projects\source\repos\Shedule\bin\Debug\net7.0\Microsoft.Data.Sqlite.dll
+D:\Program Files\C#Projects\source\repos\Shedule\bin\Debug\net7.0\Microsoft.EntityFrameworkCore.dll
+D:\Program Files\C#Projects\source\repos\Shedule\bin\Debug\net7.0\Microsoft.EntityFrameworkCore.Abstractions.dll
+D:\Program Files\C#Projects\source\repos\Shedule\bin\Debug\net7.0\Microsoft.EntityFrameworkCore.Design.dll
+D:\Program Files\C#Projects\source\repos\Shedule\bin\Debug\net7.0\Microsoft.EntityFrameworkCore.Relational.dll
+D:\Program Files\C#Projects\source\repos\Shedule\bin\Debug\net7.0\Microsoft.EntityFrameworkCore.Sqlite.dll
+D:\Program Files\C#Projects\source\repos\Shedule\bin\Debug\net7.0\Microsoft.Extensions.Configuration.Abstractions.dll
+D:\Program Files\C#Projects\source\repos\Shedule\bin\Debug\net7.0\Microsoft.Extensions.Configuration.Binder.dll
+D:\Program Files\C#Projects\source\repos\Shedule\bin\Debug\net7.0\Microsoft.Extensions.DependencyInjection.dll
+D:\Program Files\C#Projects\source\repos\Shedule\bin\Debug\net7.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+D:\Program Files\C#Projects\source\repos\Shedule\bin\Debug\net7.0\Microsoft.Extensions.DependencyModel.dll
+D:\Program Files\C#Projects\source\repos\Shedule\bin\Debug\net7.0\Microsoft.Extensions.Diagnostics.Abstractions.dll
+D:\Program Files\C#Projects\source\repos\Shedule\bin\Debug\net7.0\Microsoft.Extensions.FileProviders.Abstractions.dll
+D:\Program Files\C#Projects\source\repos\Shedule\bin\Debug\net7.0\Microsoft.Extensions.Hosting.Abstractions.dll
+D:\Program Files\C#Projects\source\repos\Shedule\bin\Debug\net7.0\Microsoft.Extensions.Logging.dll
+D:\Program Files\C#Projects\source\repos\Shedule\bin\Debug\net7.0\Microsoft.Extensions.Logging.Abstractions.dll
+D:\Program Files\C#Projects\source\repos\Shedule\bin\Debug\net7.0\Microsoft.Extensions.Options.dll
+D:\Program Files\C#Projects\source\repos\Shedule\bin\Debug\net7.0\Microsoft.Extensions.Primitives.dll
+D:\Program Files\C#Projects\source\repos\Shedule\bin\Debug\net7.0\Mono.TextTemplating.dll
+D:\Program Files\C#Projects\source\repos\Shedule\bin\Debug\net7.0\Newtonsoft.Json.dll
+D:\Program Files\C#Projects\source\repos\Shedule\bin\Debug\net7.0\Serilog.dll
+D:\Program Files\C#Projects\source\repos\Shedule\bin\Debug\net7.0\Serilog.AspNetCore.dll
+D:\Program Files\C#Projects\source\repos\Shedule\bin\Debug\net7.0\Serilog.Extensions.Hosting.dll
+D:\Program Files\C#Projects\source\repos\Shedule\bin\Debug\net7.0\Serilog.Extensions.Logging.dll
+D:\Program Files\C#Projects\source\repos\Shedule\bin\Debug\net7.0\Serilog.Formatting.Compact.dll
+D:\Program Files\C#Projects\source\repos\Shedule\bin\Debug\net7.0\Serilog.Settings.Configuration.dll
+D:\Program Files\C#Projects\source\repos\Shedule\bin\Debug\net7.0\Serilog.Sinks.Console.dll
+D:\Program Files\C#Projects\source\repos\Shedule\bin\Debug\net7.0\Serilog.Sinks.Debug.dll
+D:\Program Files\C#Projects\source\repos\Shedule\bin\Debug\net7.0\Serilog.Sinks.File.dll
+D:\Program Files\C#Projects\source\repos\Shedule\bin\Debug\net7.0\SQLitePCLRaw.batteries_v2.dll
+D:\Program Files\C#Projects\source\repos\Shedule\bin\Debug\net7.0\SQLitePCLRaw.core.dll
+D:\Program Files\C#Projects\source\repos\Shedule\bin\Debug\net7.0\SQLitePCLRaw.provider.e_sqlite3.dll
+D:\Program Files\C#Projects\source\repos\Shedule\bin\Debug\net7.0\System.CodeDom.dll
+D:\Program Files\C#Projects\source\repos\Shedule\bin\Debug\net7.0\System.Diagnostics.DiagnosticSource.dll
+D:\Program Files\C#Projects\source\repos\Shedule\bin\Debug\net7.0\System.Text.Encodings.Web.dll
+D:\Program Files\C#Projects\source\repos\Shedule\bin\Debug\net7.0\System.Text.Json.dll
+D:\Program Files\C#Projects\source\repos\Shedule\bin\Debug\net7.0\runtimes\alpine-arm\native\libe_sqlite3.so
+D:\Program Files\C#Projects\source\repos\Shedule\bin\Debug\net7.0\runtimes\alpine-arm64\native\libe_sqlite3.so
+D:\Program Files\C#Projects\source\repos\Shedule\bin\Debug\net7.0\runtimes\alpine-x64\native\libe_sqlite3.so
+D:\Program Files\C#Projects\source\repos\Shedule\bin\Debug\net7.0\runtimes\browser-wasm\nativeassets\net7.0\e_sqlite3.a
+D:\Program Files\C#Projects\source\repos\Shedule\bin\Debug\net7.0\runtimes\linux-arm\native\libe_sqlite3.so
+D:\Program Files\C#Projects\source\repos\Shedule\bin\Debug\net7.0\runtimes\linux-arm64\native\libe_sqlite3.so
+D:\Program Files\C#Projects\source\repos\Shedule\bin\Debug\net7.0\runtimes\linux-armel\native\libe_sqlite3.so
+D:\Program Files\C#Projects\source\repos\Shedule\bin\Debug\net7.0\runtimes\linux-mips64\native\libe_sqlite3.so
+D:\Program Files\C#Projects\source\repos\Shedule\bin\Debug\net7.0\runtimes\linux-musl-arm\native\libe_sqlite3.so
+D:\Program Files\C#Projects\source\repos\Shedule\bin\Debug\net7.0\runtimes\linux-musl-arm64\native\libe_sqlite3.so
+D:\Program Files\C#Projects\source\repos\Shedule\bin\Debug\net7.0\runtimes\linux-musl-x64\native\libe_sqlite3.so
+D:\Program Files\C#Projects\source\repos\Shedule\bin\Debug\net7.0\runtimes\linux-ppc64le\native\libe_sqlite3.so
+D:\Program Files\C#Projects\source\repos\Shedule\bin\Debug\net7.0\runtimes\linux-s390x\native\libe_sqlite3.so
+D:\Program Files\C#Projects\source\repos\Shedule\bin\Debug\net7.0\runtimes\linux-x64\native\libe_sqlite3.so
+D:\Program Files\C#Projects\source\repos\Shedule\bin\Debug\net7.0\runtimes\linux-x86\native\libe_sqlite3.so
+D:\Program Files\C#Projects\source\repos\Shedule\bin\Debug\net7.0\runtimes\maccatalyst-arm64\native\libe_sqlite3.dylib
+D:\Program Files\C#Projects\source\repos\Shedule\bin\Debug\net7.0\runtimes\maccatalyst-x64\native\libe_sqlite3.dylib
+D:\Program Files\C#Projects\source\repos\Shedule\bin\Debug\net7.0\runtimes\osx-arm64\native\libe_sqlite3.dylib
+D:\Program Files\C#Projects\source\repos\Shedule\bin\Debug\net7.0\runtimes\osx-x64\native\libe_sqlite3.dylib
+D:\Program Files\C#Projects\source\repos\Shedule\bin\Debug\net7.0\runtimes\win-arm\native\e_sqlite3.dll
+D:\Program Files\C#Projects\source\repos\Shedule\bin\Debug\net7.0\runtimes\win-arm64\native\e_sqlite3.dll
+D:\Program Files\C#Projects\source\repos\Shedule\bin\Debug\net7.0\runtimes\win-x64\native\e_sqlite3.dll
+D:\Program Files\C#Projects\source\repos\Shedule\bin\Debug\net7.0\runtimes\win-x86\native\e_sqlite3.dll
+D:\Program Files\C#Projects\source\repos\Shedule\bin\Debug\net7.0\runtimes\browser\lib\net7.0\System.Text.Encodings.Web.dll
+D:\Program Files\C#Projects\source\repos\Shedule\obj\Debug\net7.0\Shedule.csproj.AssemblyReference.cache
+D:\Program Files\C#Projects\source\repos\Shedule\obj\Debug\net7.0\Shedule.GeneratedMSBuildEditorConfig.editorconfig
+D:\Program Files\C#Projects\source\repos\Shedule\obj\Debug\net7.0\Shedule.AssemblyInfoInputs.cache
+D:\Program Files\C#Projects\source\repos\Shedule\obj\Debug\net7.0\Shedule.AssemblyInfo.cs
+D:\Program Files\C#Projects\source\repos\Shedule\obj\Debug\net7.0\Shedule.csproj.CoreCompileInputs.cache
+D:\Program Files\C#Projects\source\repos\Shedule\obj\Debug\net7.0\Shedule.MvcApplicationPartsAssemblyInfo.cache
+D:\Program Files\C#Projects\source\repos\Shedule\obj\Debug\net7.0\Shedule.RazorAssemblyInfo.cache
+D:\Program Files\C#Projects\source\repos\Shedule\obj\Debug\net7.0\Shedule.RazorAssemblyInfo.cs
+D:\Program Files\C#Projects\source\repos\Shedule\obj\Debug\net7.0\Shedule.sourcelink.json
+D:\Program Files\C#Projects\source\repos\Shedule\obj\Debug\net7.0\staticwebassets.build.json
+D:\Program Files\C#Projects\source\repos\Shedule\obj\Debug\net7.0\staticwebassets.development.json
+D:\Program Files\C#Projects\source\repos\Shedule\obj\Debug\net7.0\staticwebassets\msbuild.Shedule.Microsoft.AspNetCore.StaticWebAssets.props
+D:\Program Files\C#Projects\source\repos\Shedule\obj\Debug\net7.0\staticwebassets\msbuild.build.Shedule.props
+D:\Program Files\C#Projects\source\repos\Shedule\obj\Debug\net7.0\staticwebassets\msbuild.buildMultiTargeting.Shedule.props
+D:\Program Files\C#Projects\source\repos\Shedule\obj\Debug\net7.0\staticwebassets\msbuild.buildTransitive.Shedule.props
+D:\Program Files\C#Projects\source\repos\Shedule\obj\Debug\net7.0\staticwebassets.pack.json
+D:\Program Files\C#Projects\source\repos\Shedule\obj\Debug\net7.0\scopedcss\Shared\MainLayout.razor.rz.scp.css
+D:\Program Files\C#Projects\source\repos\Shedule\obj\Debug\net7.0\scopedcss\Shared\NavMenu.razor.rz.scp.css
+D:\Program Files\C#Projects\source\repos\Shedule\obj\Debug\net7.0\scopedcss\bundle\Shedule.styles.css
+D:\Program Files\C#Projects\source\repos\Shedule\obj\Debug\net7.0\scopedcss\projectbundle\Shedule.bundle.scp.css
+D:\Program Files\C#Projects\source\repos\Shedule\obj\Debug\net7.0\Shedule.csproj.CopyComplete
+D:\Program Files\C#Projects\source\repos\Shedule\obj\Debug\net7.0\Shedule.dll
+D:\Program Files\C#Projects\source\repos\Shedule\obj\Debug\net7.0\refint\Shedule.dll
+D:\Program Files\C#Projects\source\repos\Shedule\obj\Debug\net7.0\Shedule.pdb
+D:\Program Files\C#Projects\source\repos\Shedule\obj\Debug\net7.0\Shedule.genruntimeconfig.cache
+D:\Program Files\C#Projects\source\repos\Shedule\obj\Debug\net7.0\ref\Shedule.dll
+C:\Users\Kei\Desktop\Shedule\bin\Debug\net7.0\appsettings.Development.json
+C:\Users\Kei\Desktop\Shedule\bin\Debug\net7.0\appsettings.json
+C:\Users\Kei\Desktop\Shedule\bin\Debug\net7.0\Shedule.staticwebassets.runtime.json
+C:\Users\Kei\Desktop\Shedule\bin\Debug\net7.0\Shedule.exe
+C:\Users\Kei\Desktop\Shedule\bin\Debug\net7.0\Shedule.deps.json
+C:\Users\Kei\Desktop\Shedule\bin\Debug\net7.0\Shedule.runtimeconfig.json
+C:\Users\Kei\Desktop\Shedule\bin\Debug\net7.0\Shedule.dll
+C:\Users\Kei\Desktop\Shedule\bin\Debug\net7.0\Shedule.pdb
+C:\Users\Kei\Desktop\Shedule\bin\Debug\net7.0\AltairCA.Blazor.WebAssembly.Cookie.dll
+C:\Users\Kei\Desktop\Shedule\bin\Debug\net7.0\Humanizer.dll
+C:\Users\Kei\Desktop\Shedule\bin\Debug\net7.0\Microsoft.Data.Sqlite.dll
+C:\Users\Kei\Desktop\Shedule\bin\Debug\net7.0\Microsoft.EntityFrameworkCore.dll
+C:\Users\Kei\Desktop\Shedule\bin\Debug\net7.0\Microsoft.EntityFrameworkCore.Abstractions.dll
+C:\Users\Kei\Desktop\Shedule\bin\Debug\net7.0\Microsoft.EntityFrameworkCore.Design.dll
+C:\Users\Kei\Desktop\Shedule\bin\Debug\net7.0\Microsoft.EntityFrameworkCore.Relational.dll
+C:\Users\Kei\Desktop\Shedule\bin\Debug\net7.0\Microsoft.EntityFrameworkCore.Sqlite.dll
+C:\Users\Kei\Desktop\Shedule\bin\Debug\net7.0\Microsoft.Extensions.Configuration.Abstractions.dll
+C:\Users\Kei\Desktop\Shedule\bin\Debug\net7.0\Microsoft.Extensions.Configuration.Binder.dll
+C:\Users\Kei\Desktop\Shedule\bin\Debug\net7.0\Microsoft.Extensions.DependencyInjection.dll
+C:\Users\Kei\Desktop\Shedule\bin\Debug\net7.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+C:\Users\Kei\Desktop\Shedule\bin\Debug\net7.0\Microsoft.Extensions.DependencyModel.dll
+C:\Users\Kei\Desktop\Shedule\bin\Debug\net7.0\Microsoft.Extensions.Diagnostics.Abstractions.dll
+C:\Users\Kei\Desktop\Shedule\bin\Debug\net7.0\Microsoft.Extensions.FileProviders.Abstractions.dll
+C:\Users\Kei\Desktop\Shedule\bin\Debug\net7.0\Microsoft.Extensions.Hosting.Abstractions.dll
+C:\Users\Kei\Desktop\Shedule\bin\Debug\net7.0\Microsoft.Extensions.Logging.dll
+C:\Users\Kei\Desktop\Shedule\bin\Debug\net7.0\Microsoft.Extensions.Logging.Abstractions.dll
+C:\Users\Kei\Desktop\Shedule\bin\Debug\net7.0\Microsoft.Extensions.Options.dll
+C:\Users\Kei\Desktop\Shedule\bin\Debug\net7.0\Microsoft.Extensions.Primitives.dll
+C:\Users\Kei\Desktop\Shedule\bin\Debug\net7.0\Mono.TextTemplating.dll
+C:\Users\Kei\Desktop\Shedule\bin\Debug\net7.0\Newtonsoft.Json.dll
+C:\Users\Kei\Desktop\Shedule\bin\Debug\net7.0\Serilog.dll
+C:\Users\Kei\Desktop\Shedule\bin\Debug\net7.0\Serilog.AspNetCore.dll
+C:\Users\Kei\Desktop\Shedule\bin\Debug\net7.0\Serilog.Extensions.Hosting.dll
+C:\Users\Kei\Desktop\Shedule\bin\Debug\net7.0\Serilog.Extensions.Logging.dll
+C:\Users\Kei\Desktop\Shedule\bin\Debug\net7.0\Serilog.Formatting.Compact.dll
+C:\Users\Kei\Desktop\Shedule\bin\Debug\net7.0\Serilog.Settings.Configuration.dll
+C:\Users\Kei\Desktop\Shedule\bin\Debug\net7.0\Serilog.Sinks.Console.dll
+C:\Users\Kei\Desktop\Shedule\bin\Debug\net7.0\Serilog.Sinks.Debug.dll
+C:\Users\Kei\Desktop\Shedule\bin\Debug\net7.0\Serilog.Sinks.File.dll
+C:\Users\Kei\Desktop\Shedule\bin\Debug\net7.0\SQLitePCLRaw.batteries_v2.dll
+C:\Users\Kei\Desktop\Shedule\bin\Debug\net7.0\SQLitePCLRaw.core.dll
+C:\Users\Kei\Desktop\Shedule\bin\Debug\net7.0\SQLitePCLRaw.provider.e_sqlite3.dll
+C:\Users\Kei\Desktop\Shedule\bin\Debug\net7.0\System.CodeDom.dll
+C:\Users\Kei\Desktop\Shedule\bin\Debug\net7.0\System.Diagnostics.DiagnosticSource.dll
+C:\Users\Kei\Desktop\Shedule\bin\Debug\net7.0\System.Text.Encodings.Web.dll
+C:\Users\Kei\Desktop\Shedule\bin\Debug\net7.0\System.Text.Json.dll
+C:\Users\Kei\Desktop\Shedule\bin\Debug\net7.0\runtimes\alpine-arm\native\libe_sqlite3.so
+C:\Users\Kei\Desktop\Shedule\bin\Debug\net7.0\runtimes\alpine-arm64\native\libe_sqlite3.so
+C:\Users\Kei\Desktop\Shedule\bin\Debug\net7.0\runtimes\alpine-x64\native\libe_sqlite3.so
+C:\Users\Kei\Desktop\Shedule\bin\Debug\net7.0\runtimes\browser-wasm\nativeassets\net7.0\e_sqlite3.a
+C:\Users\Kei\Desktop\Shedule\bin\Debug\net7.0\runtimes\linux-arm\native\libe_sqlite3.so
+C:\Users\Kei\Desktop\Shedule\bin\Debug\net7.0\runtimes\linux-arm64\native\libe_sqlite3.so
+C:\Users\Kei\Desktop\Shedule\bin\Debug\net7.0\runtimes\linux-armel\native\libe_sqlite3.so
+C:\Users\Kei\Desktop\Shedule\bin\Debug\net7.0\runtimes\linux-mips64\native\libe_sqlite3.so
+C:\Users\Kei\Desktop\Shedule\bin\Debug\net7.0\runtimes\linux-musl-arm\native\libe_sqlite3.so
+C:\Users\Kei\Desktop\Shedule\bin\Debug\net7.0\runtimes\linux-musl-arm64\native\libe_sqlite3.so
+C:\Users\Kei\Desktop\Shedule\bin\Debug\net7.0\runtimes\linux-musl-x64\native\libe_sqlite3.so
+C:\Users\Kei\Desktop\Shedule\bin\Debug\net7.0\runtimes\linux-ppc64le\native\libe_sqlite3.so
+C:\Users\Kei\Desktop\Shedule\bin\Debug\net7.0\runtimes\linux-s390x\native\libe_sqlite3.so
+C:\Users\Kei\Desktop\Shedule\bin\Debug\net7.0\runtimes\linux-x64\native\libe_sqlite3.so
+C:\Users\Kei\Desktop\Shedule\bin\Debug\net7.0\runtimes\linux-x86\native\libe_sqlite3.so
+C:\Users\Kei\Desktop\Shedule\bin\Debug\net7.0\runtimes\maccatalyst-arm64\native\libe_sqlite3.dylib
+C:\Users\Kei\Desktop\Shedule\bin\Debug\net7.0\runtimes\maccatalyst-x64\native\libe_sqlite3.dylib
+C:\Users\Kei\Desktop\Shedule\bin\Debug\net7.0\runtimes\osx-arm64\native\libe_sqlite3.dylib
+C:\Users\Kei\Desktop\Shedule\bin\Debug\net7.0\runtimes\osx-x64\native\libe_sqlite3.dylib
+C:\Users\Kei\Desktop\Shedule\bin\Debug\net7.0\runtimes\win-arm\native\e_sqlite3.dll
+C:\Users\Kei\Desktop\Shedule\bin\Debug\net7.0\runtimes\win-arm64\native\e_sqlite3.dll
+C:\Users\Kei\Desktop\Shedule\bin\Debug\net7.0\runtimes\win-x64\native\e_sqlite3.dll
+C:\Users\Kei\Desktop\Shedule\bin\Debug\net7.0\runtimes\win-x86\native\e_sqlite3.dll
+C:\Users\Kei\Desktop\Shedule\bin\Debug\net7.0\runtimes\browser\lib\net7.0\System.Text.Encodings.Web.dll
+C:\Users\Kei\Desktop\Shedule\obj\Debug\net7.0\Shedule.csproj.AssemblyReference.cache
+C:\Users\Kei\Desktop\Shedule\obj\Debug\net7.0\Shedule.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Kei\Desktop\Shedule\obj\Debug\net7.0\Shedule.AssemblyInfoInputs.cache
+C:\Users\Kei\Desktop\Shedule\obj\Debug\net7.0\Shedule.AssemblyInfo.cs
+C:\Users\Kei\Desktop\Shedule\obj\Debug\net7.0\Shedule.csproj.CoreCompileInputs.cache
+C:\Users\Kei\Desktop\Shedule\obj\Debug\net7.0\Shedule.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\Kei\Desktop\Shedule\obj\Debug\net7.0\Shedule.RazorAssemblyInfo.cache
+C:\Users\Kei\Desktop\Shedule\obj\Debug\net7.0\Shedule.RazorAssemblyInfo.cs
+C:\Users\Kei\Desktop\Shedule\obj\Debug\net7.0\Shedule.sourcelink.json
+C:\Users\Kei\Desktop\Shedule\obj\Debug\net7.0\staticwebassets.build.json
+C:\Users\Kei\Desktop\Shedule\obj\Debug\net7.0\staticwebassets.development.json
+C:\Users\Kei\Desktop\Shedule\obj\Debug\net7.0\staticwebassets\msbuild.Shedule.Microsoft.AspNetCore.StaticWebAssets.props
+C:\Users\Kei\Desktop\Shedule\obj\Debug\net7.0\staticwebassets\msbuild.build.Shedule.props
+C:\Users\Kei\Desktop\Shedule\obj\Debug\net7.0\staticwebassets\msbuild.buildMultiTargeting.Shedule.props
+C:\Users\Kei\Desktop\Shedule\obj\Debug\net7.0\staticwebassets\msbuild.buildTransitive.Shedule.props
+C:\Users\Kei\Desktop\Shedule\obj\Debug\net7.0\staticwebassets.pack.json
+C:\Users\Kei\Desktop\Shedule\obj\Debug\net7.0\scopedcss\Shared\MainLayout.razor.rz.scp.css
+C:\Users\Kei\Desktop\Shedule\obj\Debug\net7.0\scopedcss\Shared\NavMenu.razor.rz.scp.css
+C:\Users\Kei\Desktop\Shedule\obj\Debug\net7.0\scopedcss\bundle\Shedule.styles.css
+C:\Users\Kei\Desktop\Shedule\obj\Debug\net7.0\scopedcss\projectbundle\Shedule.bundle.scp.css
+C:\Users\Kei\Desktop\Shedule\obj\Debug\net7.0\Shedule.dll
+C:\Users\Kei\Desktop\Shedule\obj\Debug\net7.0\refint\Shedule.dll
+C:\Users\Kei\Desktop\Shedule\obj\Debug\net7.0\Shedule.pdb
+C:\Users\Kei\Desktop\Shedule\obj\Debug\net7.0\Shedule.genruntimeconfig.cache
+C:\Users\Kei\Desktop\Shedule\obj\Debug\net7.0\ref\Shedule.dll
+C:\Users\Kei\Desktop\Shedule\obj\Debug\net7.0\Shedule.csproj.CopyComplete
+C:\Users\Kei\Desktop\Shedule\bin\Debug\net7.0\Microsoft.Office.Interop.Excel.dll
+C:\Users\Kei\Desktop\Shedule\bin\Debug\net7.0\Microsoft.Office.Interop.Outlook.dll
+C:\Users\Kei\Desktop\Shedule\bin\Debug\net7.0\Interop.Microsoft.Office.Interop.OneNote.dll
+C:\Users\Kei\Desktop\Shedule\bin\Debug\net7.0\Interop.Microsoft.Office.Interop.Publisher.dll
+C:\Users\Kei\Desktop\Shedule\bin\Debug\net7.0\Microsoft.Office.Interop.PowerPoint.dll
+C:\Users\Kei\Desktop\Shedule\bin\Debug\net7.0\Microsoft.Office.Interop.Word.dll
+C:\Users\Kei\Desktop\Shedule\bin\Debug\net7.0\Microsoft.Office.Interop.MSProject.dll
+C:\Users\Kei\Desktop\Shedule\bin\Debug\net7.0\Microsoft.Office.Interop.Visio.dll
+C:\Users\Kei\Desktop\Shedule\bin\Debug\net7.0\Office.dll
+C:\Users\Kei\Desktop\Debt\bin\Debug\net7.0\appsettings.Development.json
+C:\Users\Kei\Desktop\Debt\bin\Debug\net7.0\appsettings.json
+C:\Users\Kei\Desktop\Debt\bin\Debug\net7.0\Shedule.staticwebassets.runtime.json
+C:\Users\Kei\Desktop\Debt\bin\Debug\net7.0\Shedule.exe
+C:\Users\Kei\Desktop\Debt\bin\Debug\net7.0\Shedule.deps.json
+C:\Users\Kei\Desktop\Debt\bin\Debug\net7.0\Shedule.runtimeconfig.json
+C:\Users\Kei\Desktop\Debt\bin\Debug\net7.0\Shedule.dll
+C:\Users\Kei\Desktop\Debt\bin\Debug\net7.0\Shedule.pdb
+C:\Users\Kei\Desktop\Debt\bin\Debug\net7.0\AltairCA.Blazor.WebAssembly.Cookie.dll
+C:\Users\Kei\Desktop\Debt\bin\Debug\net7.0\Humanizer.dll
+C:\Users\Kei\Desktop\Debt\bin\Debug\net7.0\Interop.Microsoft.Office.Interop.OneNote.dll
+C:\Users\Kei\Desktop\Debt\bin\Debug\net7.0\Interop.Microsoft.Office.Interop.Publisher.dll
+C:\Users\Kei\Desktop\Debt\bin\Debug\net7.0\Microsoft.Data.Sqlite.dll
+C:\Users\Kei\Desktop\Debt\bin\Debug\net7.0\Microsoft.EntityFrameworkCore.dll
+C:\Users\Kei\Desktop\Debt\bin\Debug\net7.0\Microsoft.EntityFrameworkCore.Abstractions.dll
+C:\Users\Kei\Desktop\Debt\bin\Debug\net7.0\Microsoft.EntityFrameworkCore.Design.dll
+C:\Users\Kei\Desktop\Debt\bin\Debug\net7.0\Microsoft.EntityFrameworkCore.Relational.dll
+C:\Users\Kei\Desktop\Debt\bin\Debug\net7.0\Microsoft.EntityFrameworkCore.Sqlite.dll
+C:\Users\Kei\Desktop\Debt\bin\Debug\net7.0\Microsoft.Extensions.Configuration.Abstractions.dll
+C:\Users\Kei\Desktop\Debt\bin\Debug\net7.0\Microsoft.Extensions.Configuration.Binder.dll
+C:\Users\Kei\Desktop\Debt\bin\Debug\net7.0\Microsoft.Extensions.DependencyInjection.dll
+C:\Users\Kei\Desktop\Debt\bin\Debug\net7.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+C:\Users\Kei\Desktop\Debt\bin\Debug\net7.0\Microsoft.Extensions.DependencyModel.dll
+C:\Users\Kei\Desktop\Debt\bin\Debug\net7.0\Microsoft.Extensions.Diagnostics.Abstractions.dll
+C:\Users\Kei\Desktop\Debt\bin\Debug\net7.0\Microsoft.Extensions.FileProviders.Abstractions.dll
+C:\Users\Kei\Desktop\Debt\bin\Debug\net7.0\Microsoft.Extensions.Hosting.Abstractions.dll
+C:\Users\Kei\Desktop\Debt\bin\Debug\net7.0\Microsoft.Extensions.Logging.dll
+C:\Users\Kei\Desktop\Debt\bin\Debug\net7.0\Microsoft.Extensions.Logging.Abstractions.dll
+C:\Users\Kei\Desktop\Debt\bin\Debug\net7.0\Microsoft.Extensions.Options.dll
+C:\Users\Kei\Desktop\Debt\bin\Debug\net7.0\Microsoft.Extensions.Primitives.dll
+C:\Users\Kei\Desktop\Debt\bin\Debug\net7.0\Microsoft.Office.Interop.Excel.dll
+C:\Users\Kei\Desktop\Debt\bin\Debug\net7.0\Microsoft.Office.Interop.Outlook.dll
+C:\Users\Kei\Desktop\Debt\bin\Debug\net7.0\Microsoft.Office.Interop.PowerPoint.dll
+C:\Users\Kei\Desktop\Debt\bin\Debug\net7.0\Microsoft.Office.Interop.Word.dll
+C:\Users\Kei\Desktop\Debt\bin\Debug\net7.0\Mono.TextTemplating.dll
+C:\Users\Kei\Desktop\Debt\bin\Debug\net7.0\Newtonsoft.Json.dll
+C:\Users\Kei\Desktop\Debt\bin\Debug\net7.0\Microsoft.Office.Interop.MSProject.dll
+C:\Users\Kei\Desktop\Debt\bin\Debug\net7.0\Microsoft.Office.Interop.Visio.dll
+C:\Users\Kei\Desktop\Debt\bin\Debug\net7.0\Office.dll
+C:\Users\Kei\Desktop\Debt\bin\Debug\net7.0\Serilog.dll
+C:\Users\Kei\Desktop\Debt\bin\Debug\net7.0\Serilog.AspNetCore.dll
+C:\Users\Kei\Desktop\Debt\bin\Debug\net7.0\Serilog.Extensions.Hosting.dll
+C:\Users\Kei\Desktop\Debt\bin\Debug\net7.0\Serilog.Extensions.Logging.dll
+C:\Users\Kei\Desktop\Debt\bin\Debug\net7.0\Serilog.Formatting.Compact.dll
+C:\Users\Kei\Desktop\Debt\bin\Debug\net7.0\Serilog.Settings.Configuration.dll
+C:\Users\Kei\Desktop\Debt\bin\Debug\net7.0\Serilog.Sinks.Console.dll
+C:\Users\Kei\Desktop\Debt\bin\Debug\net7.0\Serilog.Sinks.Debug.dll
+C:\Users\Kei\Desktop\Debt\bin\Debug\net7.0\Serilog.Sinks.File.dll
+C:\Users\Kei\Desktop\Debt\bin\Debug\net7.0\SQLitePCLRaw.batteries_v2.dll
+C:\Users\Kei\Desktop\Debt\bin\Debug\net7.0\SQLitePCLRaw.core.dll
+C:\Users\Kei\Desktop\Debt\bin\Debug\net7.0\SQLitePCLRaw.provider.e_sqlite3.dll
+C:\Users\Kei\Desktop\Debt\bin\Debug\net7.0\System.CodeDom.dll
+C:\Users\Kei\Desktop\Debt\bin\Debug\net7.0\System.Diagnostics.DiagnosticSource.dll
+C:\Users\Kei\Desktop\Debt\bin\Debug\net7.0\System.Text.Encodings.Web.dll
+C:\Users\Kei\Desktop\Debt\bin\Debug\net7.0\System.Text.Json.dll
+C:\Users\Kei\Desktop\Debt\bin\Debug\net7.0\runtimes\alpine-arm\native\libe_sqlite3.so
+C:\Users\Kei\Desktop\Debt\bin\Debug\net7.0\runtimes\alpine-arm64\native\libe_sqlite3.so
+C:\Users\Kei\Desktop\Debt\bin\Debug\net7.0\runtimes\alpine-x64\native\libe_sqlite3.so
+C:\Users\Kei\Desktop\Debt\bin\Debug\net7.0\runtimes\browser-wasm\nativeassets\net7.0\e_sqlite3.a
+C:\Users\Kei\Desktop\Debt\bin\Debug\net7.0\runtimes\linux-arm\native\libe_sqlite3.so
+C:\Users\Kei\Desktop\Debt\bin\Debug\net7.0\runtimes\linux-arm64\native\libe_sqlite3.so
+C:\Users\Kei\Desktop\Debt\bin\Debug\net7.0\runtimes\linux-armel\native\libe_sqlite3.so
+C:\Users\Kei\Desktop\Debt\bin\Debug\net7.0\runtimes\linux-mips64\native\libe_sqlite3.so
+C:\Users\Kei\Desktop\Debt\bin\Debug\net7.0\runtimes\linux-musl-arm\native\libe_sqlite3.so
+C:\Users\Kei\Desktop\Debt\bin\Debug\net7.0\runtimes\linux-musl-arm64\native\libe_sqlite3.so
+C:\Users\Kei\Desktop\Debt\bin\Debug\net7.0\runtimes\linux-musl-x64\native\libe_sqlite3.so
+C:\Users\Kei\Desktop\Debt\bin\Debug\net7.0\runtimes\linux-ppc64le\native\libe_sqlite3.so
+C:\Users\Kei\Desktop\Debt\bin\Debug\net7.0\runtimes\linux-s390x\native\libe_sqlite3.so
+C:\Users\Kei\Desktop\Debt\bin\Debug\net7.0\runtimes\linux-x64\native\libe_sqlite3.so
+C:\Users\Kei\Desktop\Debt\bin\Debug\net7.0\runtimes\linux-x86\native\libe_sqlite3.so
+C:\Users\Kei\Desktop\Debt\bin\Debug\net7.0\runtimes\maccatalyst-arm64\native\libe_sqlite3.dylib
+C:\Users\Kei\Desktop\Debt\bin\Debug\net7.0\runtimes\maccatalyst-x64\native\libe_sqlite3.dylib
+C:\Users\Kei\Desktop\Debt\bin\Debug\net7.0\runtimes\osx-arm64\native\libe_sqlite3.dylib
+C:\Users\Kei\Desktop\Debt\bin\Debug\net7.0\runtimes\osx-x64\native\libe_sqlite3.dylib
+C:\Users\Kei\Desktop\Debt\bin\Debug\net7.0\runtimes\win-arm\native\e_sqlite3.dll
+C:\Users\Kei\Desktop\Debt\bin\Debug\net7.0\runtimes\win-arm64\native\e_sqlite3.dll
+C:\Users\Kei\Desktop\Debt\bin\Debug\net7.0\runtimes\win-x64\native\e_sqlite3.dll
+C:\Users\Kei\Desktop\Debt\bin\Debug\net7.0\runtimes\win-x86\native\e_sqlite3.dll
+C:\Users\Kei\Desktop\Debt\bin\Debug\net7.0\runtimes\browser\lib\net7.0\System.Text.Encodings.Web.dll
+C:\Users\Kei\Desktop\Debt\obj\Debug\net7.0\Shedule.csproj.AssemblyReference.cache
+C:\Users\Kei\Desktop\Debt\obj\Debug\net7.0\Shedule.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Kei\Desktop\Debt\obj\Debug\net7.0\Shedule.AssemblyInfoInputs.cache
+C:\Users\Kei\Desktop\Debt\obj\Debug\net7.0\Shedule.AssemblyInfo.cs
+C:\Users\Kei\Desktop\Debt\obj\Debug\net7.0\Shedule.csproj.CoreCompileInputs.cache
+C:\Users\Kei\Desktop\Debt\obj\Debug\net7.0\Shedule.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\Kei\Desktop\Debt\obj\Debug\net7.0\Shedule.RazorAssemblyInfo.cache
+C:\Users\Kei\Desktop\Debt\obj\Debug\net7.0\Shedule.RazorAssemblyInfo.cs
+C:\Users\Kei\Desktop\Debt\obj\Debug\net7.0\Shedule.sourcelink.json
+C:\Users\Kei\Desktop\Debt\obj\Debug\net7.0\staticwebassets.build.json
+C:\Users\Kei\Desktop\Debt\obj\Debug\net7.0\staticwebassets.development.json
+C:\Users\Kei\Desktop\Debt\obj\Debug\net7.0\staticwebassets\msbuild.Shedule.Microsoft.AspNetCore.StaticWebAssets.props
+C:\Users\Kei\Desktop\Debt\obj\Debug\net7.0\staticwebassets\msbuild.build.Shedule.props
+C:\Users\Kei\Desktop\Debt\obj\Debug\net7.0\staticwebassets\msbuild.buildMultiTargeting.Shedule.props
+C:\Users\Kei\Desktop\Debt\obj\Debug\net7.0\staticwebassets\msbuild.buildTransitive.Shedule.props
+C:\Users\Kei\Desktop\Debt\obj\Debug\net7.0\staticwebassets.pack.json
+C:\Users\Kei\Desktop\Debt\obj\Debug\net7.0\scopedcss\Shared\MainLayout.razor.rz.scp.css
+C:\Users\Kei\Desktop\Debt\obj\Debug\net7.0\scopedcss\Shared\NavMenu.razor.rz.scp.css
+C:\Users\Kei\Desktop\Debt\obj\Debug\net7.0\scopedcss\bundle\Shedule.styles.css
+C:\Users\Kei\Desktop\Debt\obj\Debug\net7.0\scopedcss\projectbundle\Shedule.bundle.scp.css
+C:\Users\Kei\Desktop\Debt\obj\Debug\net7.0\Shedule.csproj.CopyComplete
+C:\Users\Kei\Desktop\Debt\obj\Debug\net7.0\Shedule.dll
+C:\Users\Kei\Desktop\Debt\obj\Debug\net7.0\refint\Shedule.dll
+C:\Users\Kei\Desktop\Debt\obj\Debug\net7.0\Shedule.pdb
+C:\Users\Kei\Desktop\Debt\obj\Debug\net7.0\Shedule.genruntimeconfig.cache
+C:\Users\Kei\Desktop\Debt\obj\Debug\net7.0\ref\Shedule.dll
+C:\Users\Kei\Desktop\Debt3\bin\Debug\net7.0\appsettings.Development.json
+C:\Users\Kei\Desktop\Debt3\bin\Debug\net7.0\appsettings.json
+C:\Users\Kei\Desktop\Debt3\bin\Debug\net7.0\Shedule.staticwebassets.runtime.json
+C:\Users\Kei\Desktop\Debt3\bin\Debug\net7.0\Shedule.exe
+C:\Users\Kei\Desktop\Debt3\bin\Debug\net7.0\Shedule.deps.json
+C:\Users\Kei\Desktop\Debt3\bin\Debug\net7.0\Shedule.runtimeconfig.json
+C:\Users\Kei\Desktop\Debt3\bin\Debug\net7.0\Shedule.dll
+C:\Users\Kei\Desktop\Debt3\bin\Debug\net7.0\Shedule.pdb
+C:\Users\Kei\Desktop\Debt3\bin\Debug\net7.0\AltairCA.Blazor.WebAssembly.Cookie.dll
+C:\Users\Kei\Desktop\Debt3\bin\Debug\net7.0\Humanizer.dll
+C:\Users\Kei\Desktop\Debt3\bin\Debug\net7.0\Interop.Microsoft.Office.Interop.OneNote.dll
+C:\Users\Kei\Desktop\Debt3\bin\Debug\net7.0\Interop.Microsoft.Office.Interop.Publisher.dll
+C:\Users\Kei\Desktop\Debt3\bin\Debug\net7.0\Microsoft.Data.Sqlite.dll
+C:\Users\Kei\Desktop\Debt3\bin\Debug\net7.0\Microsoft.EntityFrameworkCore.dll
+C:\Users\Kei\Desktop\Debt3\bin\Debug\net7.0\Microsoft.EntityFrameworkCore.Abstractions.dll
+C:\Users\Kei\Desktop\Debt3\bin\Debug\net7.0\Microsoft.EntityFrameworkCore.Design.dll
+C:\Users\Kei\Desktop\Debt3\bin\Debug\net7.0\Microsoft.EntityFrameworkCore.Relational.dll
+C:\Users\Kei\Desktop\Debt3\bin\Debug\net7.0\Microsoft.EntityFrameworkCore.Sqlite.dll
+C:\Users\Kei\Desktop\Debt3\bin\Debug\net7.0\Microsoft.Extensions.Configuration.Abstractions.dll
+C:\Users\Kei\Desktop\Debt3\bin\Debug\net7.0\Microsoft.Extensions.Configuration.Binder.dll
+C:\Users\Kei\Desktop\Debt3\bin\Debug\net7.0\Microsoft.Extensions.DependencyInjection.dll
+C:\Users\Kei\Desktop\Debt3\bin\Debug\net7.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+C:\Users\Kei\Desktop\Debt3\bin\Debug\net7.0\Microsoft.Extensions.DependencyModel.dll
+C:\Users\Kei\Desktop\Debt3\bin\Debug\net7.0\Microsoft.Extensions.Diagnostics.Abstractions.dll
+C:\Users\Kei\Desktop\Debt3\bin\Debug\net7.0\Microsoft.Extensions.FileProviders.Abstractions.dll
+C:\Users\Kei\Desktop\Debt3\bin\Debug\net7.0\Microsoft.Extensions.Hosting.Abstractions.dll
+C:\Users\Kei\Desktop\Debt3\bin\Debug\net7.0\Microsoft.Extensions.Logging.dll
+C:\Users\Kei\Desktop\Debt3\bin\Debug\net7.0\Microsoft.Extensions.Logging.Abstractions.dll
+C:\Users\Kei\Desktop\Debt3\bin\Debug\net7.0\Microsoft.Extensions.Options.dll
+C:\Users\Kei\Desktop\Debt3\bin\Debug\net7.0\Microsoft.Extensions.Primitives.dll
+C:\Users\Kei\Desktop\Debt3\bin\Debug\net7.0\Microsoft.Office.Interop.Excel.dll
+C:\Users\Kei\Desktop\Debt3\bin\Debug\net7.0\Microsoft.Office.Interop.Outlook.dll
+C:\Users\Kei\Desktop\Debt3\bin\Debug\net7.0\Microsoft.Office.Interop.PowerPoint.dll
+C:\Users\Kei\Desktop\Debt3\bin\Debug\net7.0\Microsoft.Office.Interop.Word.dll
+C:\Users\Kei\Desktop\Debt3\bin\Debug\net7.0\Mono.TextTemplating.dll
+C:\Users\Kei\Desktop\Debt3\bin\Debug\net7.0\Newtonsoft.Json.dll
+C:\Users\Kei\Desktop\Debt3\bin\Debug\net7.0\Microsoft.Office.Interop.MSProject.dll
+C:\Users\Kei\Desktop\Debt3\bin\Debug\net7.0\Microsoft.Office.Interop.Visio.dll
+C:\Users\Kei\Desktop\Debt3\bin\Debug\net7.0\Office.dll
+C:\Users\Kei\Desktop\Debt3\bin\Debug\net7.0\Serilog.dll
+C:\Users\Kei\Desktop\Debt3\bin\Debug\net7.0\Serilog.AspNetCore.dll
+C:\Users\Kei\Desktop\Debt3\bin\Debug\net7.0\Serilog.Extensions.Hosting.dll
+C:\Users\Kei\Desktop\Debt3\bin\Debug\net7.0\Serilog.Extensions.Logging.dll
+C:\Users\Kei\Desktop\Debt3\bin\Debug\net7.0\Serilog.Formatting.Compact.dll
+C:\Users\Kei\Desktop\Debt3\bin\Debug\net7.0\Serilog.Settings.Configuration.dll
+C:\Users\Kei\Desktop\Debt3\bin\Debug\net7.0\Serilog.Sinks.Console.dll
+C:\Users\Kei\Desktop\Debt3\bin\Debug\net7.0\Serilog.Sinks.Debug.dll
+C:\Users\Kei\Desktop\Debt3\bin\Debug\net7.0\Serilog.Sinks.File.dll
+C:\Users\Kei\Desktop\Debt3\bin\Debug\net7.0\SQLitePCLRaw.batteries_v2.dll
+C:\Users\Kei\Desktop\Debt3\bin\Debug\net7.0\SQLitePCLRaw.core.dll
+C:\Users\Kei\Desktop\Debt3\bin\Debug\net7.0\SQLitePCLRaw.provider.e_sqlite3.dll
+C:\Users\Kei\Desktop\Debt3\bin\Debug\net7.0\System.CodeDom.dll
+C:\Users\Kei\Desktop\Debt3\bin\Debug\net7.0\System.Diagnostics.DiagnosticSource.dll
+C:\Users\Kei\Desktop\Debt3\bin\Debug\net7.0\System.Text.Encodings.Web.dll
+C:\Users\Kei\Desktop\Debt3\bin\Debug\net7.0\System.Text.Json.dll
+C:\Users\Kei\Desktop\Debt3\bin\Debug\net7.0\runtimes\alpine-arm\native\libe_sqlite3.so
+C:\Users\Kei\Desktop\Debt3\bin\Debug\net7.0\runtimes\alpine-arm64\native\libe_sqlite3.so
+C:\Users\Kei\Desktop\Debt3\bin\Debug\net7.0\runtimes\alpine-x64\native\libe_sqlite3.so
+C:\Users\Kei\Desktop\Debt3\bin\Debug\net7.0\runtimes\browser-wasm\nativeassets\net7.0\e_sqlite3.a
+C:\Users\Kei\Desktop\Debt3\bin\Debug\net7.0\runtimes\linux-arm\native\libe_sqlite3.so
+C:\Users\Kei\Desktop\Debt3\bin\Debug\net7.0\runtimes\linux-arm64\native\libe_sqlite3.so
+C:\Users\Kei\Desktop\Debt3\bin\Debug\net7.0\runtimes\linux-armel\native\libe_sqlite3.so
+C:\Users\Kei\Desktop\Debt3\bin\Debug\net7.0\runtimes\linux-mips64\native\libe_sqlite3.so
+C:\Users\Kei\Desktop\Debt3\bin\Debug\net7.0\runtimes\linux-musl-arm\native\libe_sqlite3.so
+C:\Users\Kei\Desktop\Debt3\bin\Debug\net7.0\runtimes\linux-musl-arm64\native\libe_sqlite3.so
+C:\Users\Kei\Desktop\Debt3\bin\Debug\net7.0\runtimes\linux-musl-x64\native\libe_sqlite3.so
+C:\Users\Kei\Desktop\Debt3\bin\Debug\net7.0\runtimes\linux-ppc64le\native\libe_sqlite3.so
+C:\Users\Kei\Desktop\Debt3\bin\Debug\net7.0\runtimes\linux-s390x\native\libe_sqlite3.so
+C:\Users\Kei\Desktop\Debt3\bin\Debug\net7.0\runtimes\linux-x64\native\libe_sqlite3.so
+C:\Users\Kei\Desktop\Debt3\bin\Debug\net7.0\runtimes\linux-x86\native\libe_sqlite3.so
+C:\Users\Kei\Desktop\Debt3\bin\Debug\net7.0\runtimes\maccatalyst-arm64\native\libe_sqlite3.dylib
+C:\Users\Kei\Desktop\Debt3\bin\Debug\net7.0\runtimes\maccatalyst-x64\native\libe_sqlite3.dylib
+C:\Users\Kei\Desktop\Debt3\bin\Debug\net7.0\runtimes\osx-arm64\native\libe_sqlite3.dylib
+C:\Users\Kei\Desktop\Debt3\bin\Debug\net7.0\runtimes\osx-x64\native\libe_sqlite3.dylib
+C:\Users\Kei\Desktop\Debt3\bin\Debug\net7.0\runtimes\win-arm\native\e_sqlite3.dll
+C:\Users\Kei\Desktop\Debt3\bin\Debug\net7.0\runtimes\win-arm64\native\e_sqlite3.dll
+C:\Users\Kei\Desktop\Debt3\bin\Debug\net7.0\runtimes\win-x64\native\e_sqlite3.dll
+C:\Users\Kei\Desktop\Debt3\bin\Debug\net7.0\runtimes\win-x86\native\e_sqlite3.dll
+C:\Users\Kei\Desktop\Debt3\bin\Debug\net7.0\runtimes\browser\lib\net7.0\System.Text.Encodings.Web.dll
+C:\Users\Kei\Desktop\Debt3\obj\Debug\net7.0\Shedule.csproj.AssemblyReference.cache
+C:\Users\Kei\Desktop\Debt3\obj\Debug\net7.0\Shedule.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Kei\Desktop\Debt3\obj\Debug\net7.0\Shedule.AssemblyInfoInputs.cache
+C:\Users\Kei\Desktop\Debt3\obj\Debug\net7.0\Shedule.AssemblyInfo.cs
+C:\Users\Kei\Desktop\Debt3\obj\Debug\net7.0\Shedule.csproj.CoreCompileInputs.cache
+C:\Users\Kei\Desktop\Debt3\obj\Debug\net7.0\Shedule.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\Kei\Desktop\Debt3\obj\Debug\net7.0\Shedule.RazorAssemblyInfo.cache
+C:\Users\Kei\Desktop\Debt3\obj\Debug\net7.0\Shedule.RazorAssemblyInfo.cs
+C:\Users\Kei\Desktop\Debt3\obj\Debug\net7.0\Shedule.sourcelink.json
+C:\Users\Kei\Desktop\Debt3\obj\Debug\net7.0\staticwebassets.build.json
+C:\Users\Kei\Desktop\Debt3\obj\Debug\net7.0\staticwebassets.development.json
+C:\Users\Kei\Desktop\Debt3\obj\Debug\net7.0\staticwebassets\msbuild.Shedule.Microsoft.AspNetCore.StaticWebAssets.props
+C:\Users\Kei\Desktop\Debt3\obj\Debug\net7.0\staticwebassets\msbuild.build.Shedule.props
+C:\Users\Kei\Desktop\Debt3\obj\Debug\net7.0\staticwebassets\msbuild.buildMultiTargeting.Shedule.props
+C:\Users\Kei\Desktop\Debt3\obj\Debug\net7.0\staticwebassets\msbuild.buildTransitive.Shedule.props
+C:\Users\Kei\Desktop\Debt3\obj\Debug\net7.0\staticwebassets.pack.json
+C:\Users\Kei\Desktop\Debt3\obj\Debug\net7.0\scopedcss\Shared\MainLayout.razor.rz.scp.css
+C:\Users\Kei\Desktop\Debt3\obj\Debug\net7.0\scopedcss\Shared\NavMenu.razor.rz.scp.css
+C:\Users\Kei\Desktop\Debt3\obj\Debug\net7.0\scopedcss\bundle\Shedule.styles.css
+C:\Users\Kei\Desktop\Debt3\obj\Debug\net7.0\scopedcss\projectbundle\Shedule.bundle.scp.css
+C:\Users\Kei\Desktop\Debt3\obj\Debug\net7.0\Shedule.csproj.CopyComplete
+C:\Users\Kei\Desktop\Debt3\obj\Debug\net7.0\Shedule.dll
+C:\Users\Kei\Desktop\Debt3\obj\Debug\net7.0\refint\Shedule.dll
+C:\Users\Kei\Desktop\Debt3\obj\Debug\net7.0\Shedule.pdb
+C:\Users\Kei\Desktop\Debt3\obj\Debug\net7.0\Shedule.genruntimeconfig.cache
+C:\Users\Kei\Desktop\Debt3\obj\Debug\net7.0\ref\Shedule.dll

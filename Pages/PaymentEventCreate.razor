@@ -1,0 +1,110 @@
+﻿@page "/createpaymentevent"
+@using Shedule.Data
+@using System.ComponentModel.DataAnnotations
+@using Shedule.Models
+
+<PageTitle>CreateSaleEvent</PageTitle>
+
+@inject IPaymentEvent ThisPaymentEvent
+@inject ICustomer ThisCustomer
+@inject ILogger<Index> Logger
+
+<h2>Создание нового платежа</h2>
+
+<hr />
+
+<!-- поля для ввода -->
+<table border="0" cellpadding="10">
+	<tr>
+		<td>Дата:</td>
+		<td>
+			<InputDate @bind-Value=@_date class="form-control" @onclick="RefreshMessageText"></InputDate>
+		</td>
+	</tr>
+	
+	<tr><td>Содержание:</td><td><InputText @bind-Value=@_paymentName @onclick="RefreshMessageText" /></td></tr>
+	
+	<tr>
+		<td>Покупатель:</td>
+		<td>
+			<InputSelect @bind-Value=@_customerId>
+			@foreach (var customer in _customers)
+			{
+				<option value="@customer.Id">@customer.CustomerName</option>
+			}
+			</InputSelect>
+		</td>
+	</tr>	
+
+	<tr><td>Сумма:</td><td><InputNumber @bind-Value=@_paymentSum @onclick="RefreshMessageText" /></td></tr>
+	
+</table>
+
+<!-- вывод результата сохранения изменений -->
+<div>@_messageText</div>
+
+<br />
+
+<!-- кнопки сохранения или возврата к списку -->
+<div>
+	<button @onclick="AddEvent" class="btn btn-success">Сохранить</button>
+	<a href="customerdetails?id=@id" class="btn btn-light text-muted">Вернуться к списку</a>
+</div>
+
+@code {
+	[Parameter]
+	[SupplyParameterFromQuery]
+	public int id { get; set; }
+
+	private IReadOnlyCollection<Customer> _customers;
+	private int _customerId;
+	private DateTime _date;
+	private double _paymentSum;
+	private string _paymentName;
+	string _messageText;
+
+	protected override async Task OnInitializedAsync()
+	{
+		try
+		{
+			Logger.LogWarning("Before: {ThreadId}", Environment.CurrentManagedThreadId.ToString());
+
+			_customers = await ThisCustomer.GetCustomers();
+			_date = DateTime.Today;
+			_customerId = id;
+		}
+		catch (Exception ex)
+		{
+
+		}		
+	}
+
+	//содание оплаты
+	private async Task AddEvent()
+	{
+		try
+		{
+			Logger.LogWarning("Before: {ThreadId}", Environment.CurrentManagedThreadId.ToString());
+			if (_date != null && _customerId != null && _paymentSum != 0 && _paymentName != null)
+			{
+				PaymentEvent _paymentEvent = new PaymentEvent(_customerId, _date, _paymentSum, _paymentName);
+				await ThisPaymentEvent.AddEvent(_paymentEvent);
+				_messageText = "Оплата была успешно сохранена.";
+			}
+			else if (_date == null) { _messageText = "необходимо указать дату"; }
+			else if (_customerId == null) { _messageText = "необходимо выбрать покупателя"; }
+			else if (_paymentSum == 0) { _messageText = "необходимо указать сумму"; }
+			else if (_paymentName == null) { _messageText = "необходимо указать содержание"; }
+		}
+		catch (Exception ex)
+		{
+
+		}		
+	}
+
+	//очистка результата сохранения изменений при нажатии на поле редактирования
+	private void RefreshMessageText()
+	{
+		_messageText = "";
+	}
+}

@@ -1,0 +1,220 @@
+﻿@page "/salesReport"
+@using Shedule.Data
+@using System.ComponentModel.DataAnnotations
+@using Shedule.Models
+@using Shedule.Services
+
+<PageTitle>AccountsReceivable</PageTitle>
+
+@inject ICustomer ThisCustomer
+@inject ICity ThisCity
+@inject ISeller ThisSeller
+@inject ISeller ThisSeller
+@inject ISaleEvent ThisSaleEvent
+@inject NavigationManager NavigationManager
+@inject ILogger<Index> Logger
+
+
+<!-- ввод города и интервала дат для отображения событий продажи и оплаты -->
+<table class="table">
+	<tbody>
+		<tr>
+			<td width="25%">
+			<th width="48%" class="align-middle">
+				Выберите город:
+			</th>
+			<th width="48%">
+				<InputSelect @bind-Value="_citieIdString" class="form-control bg-light text-dark" @onclick="GetReport">
+					<option value="none">не выбран</option>
+					@foreach (var city in _cities)
+					{
+						<option value="@city.Id">@city.CityName</option>
+					}
+				</InputSelect>
+			</th>
+				
+			</td>
+		</tr>
+		<tr>
+			<td width="25%">
+			<th width="48%">
+				<InputDate @bind-Value="_selectedDateStart" class="form-control" @onclick="ClearReport"></InputDate>
+			</th>
+			<th width="48%">
+				<InputDate @bind-Value="_selectedDateFinish" class="form-control" @onclick="ClearReport"></InputDate>
+			</th>
+			<th width="4%">
+				<button @onclick="GetReport" class="btn btn-success">Обновить</button>
+			</th>
+			</td>
+			<td>
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+
+<table class="table">
+	<tbody>
+		<tr>
+			<td width="25%">
+			<th width="48%" class="align-middle">
+				Итого отгрузок: @_sales р.
+			</th>
+			
+			</td>
+		</tr>
+		
+	</tbody>
+</table>
+
+
+
+<!-- список покупателей с суммами отгрузки -->
+
+<table class="table table-bordered">
+	<thead>
+		<tr class="table-light">
+			<th scope="col"><h5>Покупатель</h5></th>
+			<th scope="col"><h5>Отгрузка, руб.</h5></th>
+		</tr>
+	</thead>
+	<tbody>
+
+		@if (_сustomers == null || _citieIdString == "none")
+		{
+		}
+		else
+		{
+			@foreach (var company in @_сustomers)
+			{
+				<tr>
+					<td>
+						<a class="h5" href="customerreport?id=@company.Id">
+							@company.CustomerName
+						</a>
+					</td>
+
+					<td width="35%">
+						@if (GetSales(company.Id).Result != 0)
+						{
+							<p>@GetSales(company.Id).Result</p>;
+						}
+						else
+						{
+							<p class="text-success">нет продаж</p>
+					}
+					</td>
+				</tr>
+			}
+		}
+	</tbody>
+</table>
+
+
+@code {
+	private IReadOnlyCollection<Customer>? _сustomers;
+	private IReadOnlyCollection<Customer>? _sсustomers;
+	private IReadOnlyCollection<City> _cities;
+	private IReadOnlyCollection<Seller> _sellers;
+	public int _citieId;
+	public string _citieIdString;
+	private string _customerName;
+	public double _sales;
+
+
+	private DateTime _selectedDateStart;
+	private DateTime _selectedDateFinish;
+
+	protected override async Task OnInitializedAsync()
+	{
+		try
+		{
+			Logger.LogWarning("Before: {ThreadId}", Environment.CurrentManagedThreadId.ToString());
+
+			_cities = await ThisCity.GetCities();
+			_sellers = await ThisSeller.GetSellers();
+			_citieIdString = "none";
+			_sales = 0;
+			var startDate = DateTime.Today;
+			var startMonth = Convert.ToInt32(startDate.ToString().Substring(3, 2));
+			var startYear = Convert.ToInt32(startDate.ToString().Substring(6, 4));
+			_selectedDateStart = new DateTime(startYear, startMonth, 1);
+			_selectedDateFinish = DateTime.Today;
+
+			await GetReport();
+		}
+		catch (Exception ex)
+		{
+
+		}		
+	}
+
+	//отчет по городу
+	public async Task GetReport()
+	{
+		try
+		{
+			_sales = 0;
+			if (_citieIdString == null || _citieIdString == "none")
+			{
+				_сustomers = null;
+			}
+			else
+			{
+				_citieId = Convert.ToInt32(_citieIdString);
+				_sсustomers = await ThisCustomer.GetActiveCustomersByCityId(_citieId);
+				if (_sсustomers == null)
+				{
+					_сustomers = null;
+				}
+
+				else
+				{
+					_сustomers = _sсustomers;
+					foreach (var item in _сustomers)
+					{
+						_sales = _sales + GetSales(item.Id).Result;
+					}
+				}
+			}
+		}
+		catch (Exception ex)
+		{
+
+		}		
+	}	
+
+
+	//получение суммы продаж клиента
+	private async Task<Double> GetSales(int id)
+	{
+		try
+		{
+			double thisSales = 0;
+			var _saleEvents = await ThisSaleEvent.GetByDateIntervalAndCustomer(id, _selectedDateStart, _selectedDateFinish);
+			thisSales = _saleEvents.Where(p => p.SaleCityId == _citieId)
+						.Sum(u => u.SaleSumm);
+			return thisSales;
+		}
+		catch (Exception ex)
+		{
+			return 0;
+		}
+	}
+
+
+	//очистить отчет
+	public async Task ClearReport()
+	{
+		try
+		{
+			_сustomers = null;
+			_sales = 0;
+		}
+		catch (Exception ex)
+		{
+
+		}
+	}	
+}

@@ -1,0 +1,92 @@
+﻿@page "/edittingcity"
+@using Shedule.Data
+@using System.ComponentModel.DataAnnotations
+@using Shedule.Models
+
+<PageTitle>EdittingCities</PageTitle>
+
+@inject ICity ThisCity
+@inject ILogger<Index> Logger
+
+<h2>Редактирование города</h2>
+
+<hr />
+
+<!-- модель для редактирования полей города -->
+<EditForm Model="_model" OnValidSubmit="ProcessValidForm">
+	<DataAnnotationsValidator />
+
+	<table border="0" cellpadding="10">
+		<tr>
+			<td>Название:</td><td><InputText @bind-Value="_model.Name" @onclick="RefreshMessageText"/></td>
+		</tr>
+	</table>
+	<div class="add_city_div">@_messageText</div>
+
+	<br /> 
+	
+	<input type="submit" value="Сохранить" class="btn btn-success">
+	<a href="cities" class="btn btn-light text-muted">Вернуться к списку </a>
+	<ValidationSummary />
+</EditForm>
+
+@code {
+	[Parameter]
+	[SupplyParameterFromQuery]
+	public int id { get; set; }
+
+	private IReadOnlyCollection<City>? _cities;
+	private string _cityName;
+	private City _thisCity;
+	private string _messageText;
+
+	protected override async Task OnInitializedAsync()
+	{
+		try
+		{
+			Logger.LogWarning("Before: {ThreadId}", Environment.CurrentManagedThreadId.ToString());
+			_cities = await ThisCity.GetCities();
+			if (_cityName == null)
+			{
+				_thisCity = await ThisCity.GetById(id);
+				_model.Name = _thisCity.CityName;
+			}
+		}
+		catch (Exception ex)
+		{
+
+		}
+	}
+
+	private FormModel _model = new();
+
+	//изменение города
+	private void ProcessValidForm()
+	{
+		try
+		{
+			Logger.LogWarning("Before: {ThreadId}", Environment.CurrentManagedThreadId.ToString());
+			_thisCity.CityName = _model.Name;
+			ThisCity.Update(_thisCity);
+			_messageText = "Изменения сохранены.";
+		}
+		catch (Exception ex)
+		{
+
+		}
+	}
+
+	//описание модели
+	private class FormModel
+	{
+		[Required(ErrorMessage = "Необходимо заполнить название.")]
+		[MinLength(3, ErrorMessage = "Название должно содержать менее 3-х символов.")]
+		public string Name { get; set; }
+	}
+
+	//очистка результата сохранения изменений при нажатии на поле редактирования
+	private void RefreshMessageText()
+	{
+		_messageText = "";
+	}
+}
